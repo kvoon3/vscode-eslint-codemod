@@ -39,7 +39,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "eslintcodemod.toggleAutoFix",
+        "command": "eslintCodemod.toggleAutoFix",
         "category": "ESLint codemod",
         "title": "Toggle `autocomplete.autoFix` configuration"
       }

@@ -46,7 +46,7 @@ In-editor guidance with examples, helping your master Comment-as-command.
 
 | Command                       | Title                                                       |
 | ----------------------------- | ----------------------------------------------------------- |
-| `eslintcodemod.toggleAutoFix` | ESLint codemod: Toggle `autocomplete.autoFix` configuration |
+| `eslintCodemod.toggleAutoFix` | ESLint codemod: Toggle `autocomplete.autoFix` configuration |
 
 <!-- commands -->
 

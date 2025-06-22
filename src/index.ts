@@ -7,7 +7,7 @@ import { logger } from './utils'
 const { activate, deactivate } = defineExtension(() => {
   logger.info(`${extensionId} activated`)
 
-  watchConfig('eslintCommand.languageIds', () => {
+  watchConfig('eslintCodemod.languageIds', () => {
     registerAutoComplete()
   }, { immediate: true })
 
