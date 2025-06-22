@@ -5,6 +5,7 @@
 <h1 align="center">ESLint Codemod<sup>VS Code</sup></h1>
 
 <p align="center">
+  <a href="https://img.shields.io/visual-studio-marketplace/v/kvoon.vscode-eslint-codemod" target="__blank"><img alt="Visual Studio Marketplace Version" src="https://img.shields.io/visual-studio-marketplace/v/kvoon.vscode-eslint-codemod?style=flat&labelColor=%2373C1FF&color=%230078D7"></a>
   <a href="https://kermanx.github.io/reactive-vscode/" target="__blank"><img src="https://img.shields.io/badge/made_with-reactive--vscode-%23007ACC?style=flat&labelColor=%23229863"  alt="Made with reactive-vscode" /></a>
 </p>
 
