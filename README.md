@@ -29,6 +29,11 @@ Apply transformations instantly — no `eslint --fix` or `formatOnSave` required
 
 In-editor guidance with examples, helping your master Comment-as-command.
 
+## Todos
+
+- [ ] Support user-specific ESLint configuration
+- [ ] Re-enable `tsdown`
+
 ## Configurations
 
 <!-- configs -->
