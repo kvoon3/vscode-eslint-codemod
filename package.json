@@ -24,7 +24,7 @@
     "Other"
   ],
   "main": "./dist/index.js",
-  "icon": "res/icon.png",
+  "icon": "res/logo.png",
   "files": [
     "LICENSE.md",
     "dist/*",

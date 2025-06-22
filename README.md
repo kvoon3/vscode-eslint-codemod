@@ -1,5 +1,5 @@
 <p align="center">
-<img  src="https://eslint-plugin-command.antfu.me/logo.svg" height="150" />
+  <img src="https://github.com/kvoon3/vscode-eslint-codemod/blob/main/res/logo.png" height="150" />
 </p>
 
 <h1 align="center">ESLint Codemod<sup>VS Code</sup></h1>
