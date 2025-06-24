@@ -10,6 +10,7 @@ import { logger } from './utils'
 
 const triggerConditionMap = {
   '@': /\/\//,
+  ':': /\/\//,
   '/': /\/\/\//,
 }
 
@@ -69,7 +70,7 @@ const provider: CompletionItemProvider = {
   async resolveCompletionItem(item) {
     const getContent = async () => {
       // @ts-expect-error unsupported
-      const { name } = builtinCommands.find(i => [i.name, ...(i?.alias || [])].includes(item.label as string))!
+      const { name } = builtinCommands.find(i => [i.name, ...(i?.alias ?? [])].includes(item.label as string))!
       try {
         const content = await ofetch(`https://raw.githubusercontent.com/antfu/eslint-plugin-command/refs/heads/main/src/commands/${name}.md`)
         return new MarkdownString(content)
