@@ -1,12 +1,11 @@
-import { defineExtension, shallowRef, useCommands, watch } from 'reactive-vscode'
-import * as vscode from 'vscode'
+import { defineExtension, shallowRef, useActiveTextEditor, useCommands, watch } from 'reactive-vscode'
 import { registerAutoComplete, unregisterAutoComplete } from './autocomplete'
 import { config } from './config'
 import { commands, extensionId } from './generated/meta'
 import { ESLintConfigLoader } from './loader'
 import { getCurWorkspaceDir, logger } from './utils'
 
-const { activate, deactivate } = defineExtension((ctx) => {
+const { activate, deactivate } = defineExtension(() => {
   logger.info(`${extensionId} activated`)
 
   const loader = new ESLintConfigLoader()
@@ -15,37 +14,40 @@ const { activate, deactivate } = defineExtension((ctx) => {
 
   watch(enable, (value) => {
     if (value) {
-      registerAutoComplete()
+      registerAutoComplete(config.languageIds)
     }
     else {
       unregisterAutoComplete()
     }
   })
 
-  ctx.subscriptions.push(
-    vscode.workspace.onDidOpenTextDocument(async (doc) => {
-      try {
-        const cwd = getCurWorkspaceDir(doc)
-        if (!cwd)
-          return
+  const editor = useActiveTextEditor()
+  watch(editor, async (value) => {
+    if (!value)
+      return
 
-        const config = await loader.resolveConfig(cwd)
-        if (!config)
-          return
+    const { document: doc } = value
+    try {
+      const cwd = getCurWorkspaceDir(doc)
+      if (!cwd)
+        return
 
-        const commandConfig = config.plugins?.command
-        const hasESLintPluginCommand = enable.value = commandConfig && commandConfig?.meta?.name === 'command'
-        logger.info('hasESLintPluginCommand', hasESLintPluginCommand)
-      }
-      catch (error) {
-        logger.error('error', error)
-      }
-    }),
-  )
+      const config = await loader.resolveConfig(cwd)
+      if (!config)
+        return
 
-  watch(config.languageIds, () => {
+      const commandConfig = config.plugins?.command
+      const hasESLintPluginCommand = enable.value = commandConfig && commandConfig?.meta?.name === 'command'
+      logger.info('hasESLintPluginCommand', hasESLintPluginCommand)
+    }
+    catch (error) {
+      logger.error('error', error)
+    }
+  }, { immediate: true })
+
+  watch(config.languageIds, (value) => {
     if (enable.value)
-      registerAutoComplete()
+      registerAutoComplete(value)
   })
 
   useCommands({

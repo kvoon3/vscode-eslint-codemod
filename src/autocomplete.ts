@@ -75,11 +75,11 @@ const provider: CompletionItemProvider = {
 }
 
 let completionDisposable: Disposable | null = null
-export function registerAutoComplete() {
+export function registerAutoComplete(languageIds: string[]) {
   unregisterAutoComplete()
 
   completionDisposable = useDisposable(languages.registerCompletionItemProvider(
-    config.languageIds,
+    languageIds,
     provider,
     ...triggerChars,
   ))
