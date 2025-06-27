@@ -1,7 +1,7 @@
 import type { CompletionItemProvider, Disposable } from 'vscode'
 import { objectKeys } from '@antfu/utils'
 import { ofetch } from 'ofetch'
-import { useDisposable } from 'reactive-vscode'
+import { useDisposable, watch } from 'reactive-vscode'
 import { CompletionItem, CompletionItemKind, CompletionList, languages, MarkdownString, SnippetString } from 'vscode'
 import { config } from './config'
 import { builtinCommandNames } from './generated/commands'
@@ -93,12 +93,20 @@ export function unregisterAutoComplete() {
 }
 
 const cachedContent = new Map<string, string>()
+watch(() => config.autocomplete.docs, () => {
+  cachedContent.clear()
+})
 async function getContent(name: string) {
   if (cachedContent.has(name))
     return cachedContent.get(name)
 
   try {
-    const content = await ofetch(`https://raw.githubusercontent.com/antfu/eslint-plugin-command/refs/heads/main/src/commands/${name}.md`)
+    let content: string
+    if (config.autocomplete.docs)
+      content = await ofetch(`https://raw.githubusercontent.com/antfu/eslint-plugin-command/refs/heads/main/src/commands/${name}.md`)
+    else
+      content = `See https://eslint-plugin-command.antfu.me/commands/${name}`
+
     cachedContent.set(name, content)
     return content
   }

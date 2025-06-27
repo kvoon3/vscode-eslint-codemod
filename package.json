@@ -63,6 +63,11 @@
           "default": true,
           "description": "Auto fix code when autocomplete finish",
           "scope": "application"
+        },
+        "eslintCodemod.autocomplete.docs": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether open document content of selected command"
         }
       }
     }
@@ -111,6 +116,6 @@
     "pre-commit": "pnpm exec lint-staged"
   },
   "lint-staged": {
-    "*": "eslint --fix"
+    "*": "eslint . --fix"
   }
 }

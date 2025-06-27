@@ -53,6 +53,7 @@ const { activate, deactivate } = defineExtension(() => {
   useCommands({
     [commands.toggleAutoFix]() {
       config.$set('autocomplete', {
+        ...config.autocomplete,
         autoFix: !config.autocomplete.autoFix,
       })
     },
