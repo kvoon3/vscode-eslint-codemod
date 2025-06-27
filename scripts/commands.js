@@ -36,7 +36,8 @@ function extractCommands(code) {
     },
   })
 
-  return Array.from(commandNames).map(i => ({ name: i }))
+  // TODO: make a pr to correct typo of `hoist-reg-exp`
+  return Array.from(commandNames).map(i => ({ name: i === 'hoist-reg-exp' ? 'hoist-regexp' : i }))
 }
 
 async function updateRepo(commands) {
