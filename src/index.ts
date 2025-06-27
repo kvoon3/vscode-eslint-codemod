@@ -1,7 +1,7 @@
 import { defineExtension, shallowRef, useCommands, watch } from 'reactive-vscode'
 import * as vscode from 'vscode'
 import { registerAutoComplete, unregisterAutoComplete } from './autocomplete'
-import { config, watchConfig } from './config'
+import { config } from './config'
 import { commands, extensionId } from './generated/meta'
 import { ESLintConfigLoader } from './loader'
 import { getCurWorkspaceDir, logger } from './utils'
@@ -43,10 +43,10 @@ const { activate, deactivate } = defineExtension((ctx) => {
     }),
   )
 
-  watchConfig('eslintCodemod.languageIds', () => {
+  watch(config.languageIds, () => {
     if (enable.value)
       registerAutoComplete()
-  }, { immediate: true })
+  })
 
   useCommands({
     [commands.toggleAutoFix]() {
