@@ -27,6 +27,12 @@ catalogs:
     eslint:
       specifier: ^9.29.0
       version: 9.29.0
+    esno:
+      specifier: ^4.8.0
+      version: 4.8.0
+    lint-staged:
+      specifier: ^16.1.2
+      version: 16.1.2
     pnpm:
       specifier: ^10.12.1
       version: 10.12.1
@@ -62,12 +68,6 @@ catalogs:
     '@antfu/utils':
       specifier: ^9.2.0
       version: 9.2.0
-    esno:
-      specifier: ^4.8.0
-      version: 4.8.0
-    lint-staged:
-      specifier: ^16.1.2
-      version: 16.1.2
     ofetch:
       specifier: ^1.4.1
       version: 1.4.1
@@ -113,10 +113,10 @@ importers:
         specifier: catalog:cli
         version: 9.29.0(jiti@2.4.2)
       esno:
-        specifier: catalog:utils
+        specifier: catalog:cli
         version: 4.8.0
       lint-staged:
-        specifier: catalog:utils
+        specifier: catalog:cli
         version: 16.1.2
       ofetch:
         specifier: catalog:utils
