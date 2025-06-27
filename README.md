@@ -34,6 +34,8 @@ In-editor guidance with examples, helping your master Comment-as-command.
 - [ ] Support user-specific ESLint configuration
 - [ ] Preview code change
 - [ ] Re-enable `tsdown`
+- [ ] Alias support
+- [ ] Lazy input
 
 ## Configurations
 

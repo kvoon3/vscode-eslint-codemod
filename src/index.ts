@@ -14,7 +14,7 @@ const { activate, deactivate } = defineExtension(() => {
 
   watch(enable, (value) => {
     if (value) {
-      registerAutoComplete(config.languageIds)
+      registerAutoComplete()
     }
     else {
       unregisterAutoComplete()
@@ -45,9 +45,9 @@ const { activate, deactivate } = defineExtension(() => {
     }
   }, { immediate: true })
 
-  watch(config.languageIds, (value) => {
+  watch(config.languageIds, () => {
     if (enable.value)
-      registerAutoComplete(value)
+      registerAutoComplete()
   })
 
   useCommands({
