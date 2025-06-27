@@ -10,7 +10,6 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "eslint": "catalog:cli",
-    "eslint-plugin-command": "catalog:cli"
+    "eslint": "catalog:cli"
   }
 }

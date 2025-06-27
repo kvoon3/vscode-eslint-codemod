@@ -27,9 +27,6 @@ catalogs:
     eslint:
       specifier: ^9.29.0
       version: 9.29.0
-    eslint-plugin-command:
-      specifier: ^3.3.1
-      version: 3.3.1
     pnpm:
       specifier: ^10.12.1
       version: 10.12.1
@@ -115,9 +112,6 @@ importers:
       eslint:
         specifier: catalog:cli
         version: 9.29.0(jiti@2.4.2)
-      eslint-plugin-command:
-        specifier: catalog:cli
-        version: 3.3.1(eslint@9.29.0(jiti@2.4.2))
       esno:
         specifier: catalog:utils
         version: 4.8.0
@@ -163,9 +157,6 @@ importers:
       eslint:
         specifier: catalog:cli
         version: 9.29.0(jiti@2.4.2)
-      eslint-plugin-command:
-        specifier: catalog:cli
-        version: 3.3.1(eslint@9.29.0(jiti@2.4.2))
 
 packages:
 
