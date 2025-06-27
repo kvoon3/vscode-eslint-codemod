@@ -3,16 +3,10 @@ import * as vscode from 'vscode'
 import { logger } from './utils'
 
 export class ESLintConfigLoader {
-  // private configCache = new Map<string, any>()
-
   async resolveConfig(cwd: string) {
-    // if (this.configCache.has(cwd))
-    //   return this.configCache.get(cwd)
-
     try {
       const eslint = new ESLint({
         cwd,
-        // overrideConfigFile: true,
         fix: false,
       })
 
@@ -20,7 +14,6 @@ export class ESLintConfigLoader {
 
       if (configPath) {
         const config = eslint.calculateConfigForFile(configPath)
-        // this.configCache.set('cwd', config)
         return config
       }
       else {

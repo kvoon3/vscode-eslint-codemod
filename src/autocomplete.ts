@@ -1,11 +1,10 @@
-import type { Command } from 'eslint-plugin-command/commands'
 import type { CompletionItemProvider, Disposable } from 'vscode'
 import { objectKeys } from '@antfu/utils'
-import { builtinCommands } from 'eslint-plugin-command/commands'
 import { ofetch } from 'ofetch'
 import { useDisposable } from 'reactive-vscode'
 import { CompletionItem, CompletionItemKind, CompletionList, languages, MarkdownString, SnippetString } from 'vscode'
 import { config } from './config'
+import { builtinCommandNames } from './generated/commands'
 import { logger } from './utils'
 
 const triggerConditionMap = {
@@ -19,12 +18,8 @@ type TriggerChar = keyof typeof triggerConditionMap
 
 const provider: CompletionItemProvider = {
   provideCompletionItems(document, position, _, { triggerCharacter }) {
-    function createCompletion(command: Command): CompletionItem[] {
-      const {
-        name,
-        // @ts-expect-error unsupported
-        alias = [],
-      } = command
+    function createCompletion(name: string): CompletionItem[] {
+      const alias: string[] = []
 
       const genItem = (label: string) => {
         const line = document.lineAt(position.line).text.trim()
@@ -60,7 +55,7 @@ const provider: CompletionItemProvider = {
     }
 
     try {
-      const list = builtinCommands.flatMap(createCompletion)
+      const list = builtinCommandNames.flatMap(i => createCompletion(i.name))
       return new CompletionList(list, true)
     }
     catch {
@@ -68,22 +63,13 @@ const provider: CompletionItemProvider = {
     }
   },
   async resolveCompletionItem(item) {
-    const getContent = async () => {
-      // @ts-expect-error unsupported
-      const { name } = builtinCommands.find(i => [i.name, ...(i?.alias ?? [])].includes(item.label as string))!
-      try {
-        const content = await ofetch(`https://raw.githubusercontent.com/antfu/eslint-plugin-command/refs/heads/main/src/commands/${name}.md`)
-        return new MarkdownString(content)
-      }
-      catch (error) {
-        logger.error('error', error)
-      }
-    }
-    getContent()
+    const name = typeof item.label === 'string'
+      ? item.label
+      : item.label.label
 
     return {
       ...item,
-      documentation: await getContent(),
+      documentation: new MarkdownString(await getContent(name)),
     }
   },
 }
@@ -103,5 +89,21 @@ export function unregisterAutoComplete() {
   if (completionDisposable) {
     completionDisposable.dispose()
     completionDisposable = null
+  }
+}
+
+const cachedContent = new Map<string, string>()
+async function getContent(name: string) {
+  if (cachedContent.has(name))
+    return cachedContent.get(name)
+
+  try {
+    const content = await ofetch(`https://raw.githubusercontent.com/antfu/eslint-plugin-command/refs/heads/main/src/commands/${name}.md`)
+    cachedContent.set(name, content)
+    return content
+  }
+  catch (error) {
+    logger.error('error', error)
+    return `See https://eslint-plugin-command.antfu.me/commands/${name}`
   }
 }

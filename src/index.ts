@@ -24,11 +24,8 @@ const { activate, deactivate } = defineExtension((ctx) => {
 
   ctx.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument(async (doc) => {
-      logger.show()
       try {
         const cwd = getCurWorkspaceDir(doc)
-        logger.info('cwd', cwd)
-
         if (!cwd)
           return
 
@@ -39,7 +36,6 @@ const { activate, deactivate } = defineExtension((ctx) => {
         const commandConfig = config.plugins?.command
         const hasESLintPluginCommand = enable.value = commandConfig && commandConfig?.meta?.name === 'command'
         logger.info('hasESLintPluginCommand', hasESLintPluginCommand)
-        logger.log('commandConfig', commandConfig)
       }
       catch (error) {
         logger.error('error', error)
