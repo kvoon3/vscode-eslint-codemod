@@ -1,3 +1,6 @@
+/* eslint-disable ts/ban-ts-comment */
+// @ts-nocheck
+
 import { consola } from 'consola'
 
 const statusMap = {
