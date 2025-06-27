@@ -1,0 +1,16 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.12.1",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "eslint": "catalog:cli",
+    "eslint-plugin-command": "catalog:cli"
+  }
+}
