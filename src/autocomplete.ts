@@ -1,12 +1,12 @@
 import type { CompletionItemProvider, Disposable, TextEditor } from 'vscode'
 import { objectKeys } from '@antfu/utils'
+import { ESLint, Linter } from 'eslint'
 import { ofetch } from 'ofetch'
 import { useActiveTextEditor, useDisposable, watch } from 'reactive-vscode'
 import { CompletionItem, CompletionItemKind, CompletionList, languages, MarkdownString, SnippetString } from 'vscode'
 import { config } from './config'
 import { builtinCommandNames } from './generated/commands'
-import { eslint } from './loader'
-import { logger } from './utils'
+import { getCurWorkspaceDir, logger } from './utils'
 
 const triggerConditionMap = {
   '@': /\/\//,
@@ -68,28 +68,35 @@ const provider: CompletionItemProvider = {
       ? item.label
       : item.label.label
 
-    function appendText(editor: TextEditor, text: string) {
-      const document = editor.document
-      const line = document.lineAt(editor.selection.active.line)
-
-      const RE = /(\/\/\/\s*).*/
-      const newLine = line.text.replace(RE, `$1${text}`)
-
-      // Replace the entire line in document text
-      const fullText = document.getText()
-      const beforeLines = fullText.split('\n').slice(0, line.lineNumber).join('\n')
-      const afterLines = fullText.split('\n').slice(line.lineNumber + 1).join('\n')
-
-      return [beforeLines, newLine, afterLines].filter(s => s !== '').join('\n')
-    }
-
     const editor = useActiveTextEditor()
 
-    if (editor.value) {
-      const textWithCurCommand = appendText(editor.value, label)
-      const res = await eslint.value?.lintText(textWithCurCommand)
-      if (res)
-        logger.info('res', res[0].source)
+    try {
+      if (editor.value) {
+        const code = appendText(editor.value, label)
+        const cwd = getCurWorkspaceDir(editor.value.document)
+        const eslint = new ESLint({ cwd })
+        // const res = await eslint.lintText(code, {
+        //   filePath: editor.value.document.fileName
+        // })
+        const configFile = await eslint.findConfigFile()
+        if (configFile) {
+          const config = await import(configFile).then(i => i.default)
+          const linter = new Linter({ cwd })
+
+          // FIXME: cannot lint code
+          const res = linter.verify(code, config, 'example.js')
+          // const res = await eslint.lintText(code)
+          // const res = linter.value.verify(code, lintConfig.value, 'example.ts')
+          logger.log('res', res)
+        }
+      }
+      else {
+        logger.info('editor.value', editor.value)
+      }
+    }
+    catch (error) {
+      logger.info('error', error)
+      logger.log('error', error)
     }
 
     return {
@@ -139,4 +146,19 @@ async function getContent(name: string) {
     logger.error('error', error)
     return `See https://eslint-plugin-command.antfu.me/commands/${name}`
   }
+}
+
+export function appendText(editor: TextEditor, text: string) {
+  const document = editor.document
+  const line = document.lineAt(editor.selection.active.line)
+
+  const RE = /(\/\/\/\s*).*/
+  const newLine = line.text.replace(RE, `$1${text}`)
+
+  // Replace the entire line in document text
+  const fullText = document.getText()
+  const beforeLines = fullText.split('\n').slice(0, line.lineNumber).join('\n')
+  const afterLines = fullText.split('\n').slice(line.lineNumber + 1).join('\n')
+
+  return [beforeLines, newLine, afterLines].filter(s => s !== '').join('\n')
 }

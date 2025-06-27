@@ -2,13 +2,12 @@ import { defineExtension, shallowRef, useActiveTextEditor, useCommands, watch } 
 import { registerAutoComplete, unregisterAutoComplete } from './autocomplete'
 import { config } from './config'
 import { commands, extensionId } from './generated/meta'
-import { ESLintConfigLoader } from './loader'
+import { resolveLintConfig } from './lint'
 import { getCurWorkspaceDir, logger } from './utils'
 
 const { activate, deactivate } = defineExtension(() => {
+  logger.show()
   logger.info(`${extensionId} activated`)
-
-  const loader = new ESLintConfigLoader()
 
   const enable = shallowRef(false)
 
@@ -32,13 +31,7 @@ const { activate, deactivate } = defineExtension(() => {
       if (!cwd)
         return
 
-      const config = await loader.resolveConfig(cwd)
-      if (!config)
-        return
-
-      const commandConfig = config.plugins?.command
-      const hasESLintPluginCommand = enable.value = commandConfig && commandConfig?.meta?.name === 'command'
-      logger.info('hasESLintPluginCommand', hasESLintPluginCommand)
+      enable.value = !!(await resolveLintConfig(cwd))
     }
     catch (error) {
       logger.error('error', error)
