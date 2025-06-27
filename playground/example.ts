@@ -21,8 +21,7 @@ export async function log<T extends string>(input: T): Promise<void> {
   let message: string
   if (statusMap[status])
     message = statusMap[status]
-  else
-    message = 'Unknown Status Code'
+  else message = 'Unknown Status Code'
 
   consola[errorCodes.includes(status) ? 'error' : 'info'](
     `Status Code: ${status} - Message: ${message}`,

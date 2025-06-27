@@ -1,10 +1,11 @@
-import type { CompletionItemProvider, Disposable } from 'vscode'
+import type { CompletionItemProvider, Disposable, TextEditor } from 'vscode'
 import { objectKeys } from '@antfu/utils'
 import { ofetch } from 'ofetch'
-import { useDisposable, watch } from 'reactive-vscode'
+import { useActiveTextEditor, useDisposable, watch } from 'reactive-vscode'
 import { CompletionItem, CompletionItemKind, CompletionList, languages, MarkdownString, SnippetString } from 'vscode'
 import { config } from './config'
 import { builtinCommandNames } from './generated/commands'
+import { eslint } from './loader'
 import { logger } from './utils'
 
 const triggerConditionMap = {
@@ -63,13 +64,37 @@ const provider: CompletionItemProvider = {
     }
   },
   async resolveCompletionItem(item) {
-    const name = typeof item.label === 'string'
+    const label = typeof item.label === 'string'
       ? item.label
       : item.label.label
 
+    function appendText(editor: TextEditor, text: string) {
+      const document = editor.document
+      const line = document.lineAt(editor.selection.active.line)
+
+      const RE = /(\/\/\/\s*).*/
+      const newLine = line.text.replace(RE, `$1${text}`)
+
+      // Replace the entire line in document text
+      const fullText = document.getText()
+      const beforeLines = fullText.split('\n').slice(0, line.lineNumber).join('\n')
+      const afterLines = fullText.split('\n').slice(line.lineNumber + 1).join('\n')
+
+      return [beforeLines, newLine, afterLines].filter(s => s !== '').join('\n')
+    }
+
+    const editor = useActiveTextEditor()
+
+    if (editor.value) {
+      const textWithCurCommand = appendText(editor.value, label)
+      const res = await eslint.value?.lintText(textWithCurCommand)
+      if (res)
+        logger.info('res', res[0].source)
+    }
+
     return {
       ...item,
-      documentation: new MarkdownString(await getContent(name)),
+      documentation: new MarkdownString(await getContent(label)),
     }
   },
 }
