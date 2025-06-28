@@ -1,27 +1,31 @@
 import type { Command } from 'eslint-plugin-command/commands'
-import type { CompletionItemProvider, Disposable, TextEditor } from 'vscode'
+import type { CompletionItemProvider, Disposable, TextDocument, TextEditor } from 'vscode'
 import { objectEntries } from '@antfu/utils'
 import { ESLint, Linter } from 'eslint'
 import { builtinCommands } from 'eslint-plugin-command/commands'
 import { ofetch } from 'ofetch'
-import { useActiveTextEditor, useDisposable, watch } from 'reactive-vscode'
-import { CompletionItem, CompletionItemKind, CompletionList, CompletionTriggerKind, languages, MarkdownString, SnippetString } from 'vscode'
+import { useActiveTextEditor, useDisposable, useTextEditorSelection, watch } from 'reactive-vscode'
+import { CompletionItem, CompletionItemKind, CompletionList, CompletionTriggerKind, languages, MarkdownString, Position, Range, SnippetString } from 'vscode'
 import { config } from './config'
 import { getCurWorkspaceDir, logger } from './utils'
 
 interface Trigger {
   char: '/' | '@' | ':'
-  condition: RegExp
+  condition: () => boolean
 }
 
 const lineTriggers: Trigger[] = [
-  { char: '/', condition: /\/\/\// },
-  { char: ':', condition: /\/\// },
-  { char: '@', condition: /\/\// },
+  ///
+  { char: '/', condition: () => isInsideLineComment('///') },
+  // :
+  { char: ':', condition: isInsideLineComment },
+  // @
+  { char: '@', condition: isInsideLineComment },
 ]
 
 const blockTriggers: Trigger[] = [
-  { char: '@', condition: /\/\*\*/ },
+  /** @ */
+  { char: '@', condition: isInsideBlockComment },
 ]
 
 type CommentType = Exclude<Command['commentType'], undefined>
@@ -40,7 +44,7 @@ const triggerChars = objectEntries(commentTriggerMap).flatMap(([_, triggerInfo])
 
 let triggerChar: string | undefined
 const provider: CompletionItemProvider = {
-  provideCompletionItems(document, position, _, { triggerCharacter, triggerKind }) {
+  provideCompletionItems(_document, _position, _, { triggerCharacter, triggerKind }) {
     if (triggerKind === CompletionTriggerKind.TriggerCharacter)
       triggerChar = triggerCharacter
 
@@ -51,9 +55,8 @@ const provider: CompletionItemProvider = {
       const items: CompletionItem[] = []
 
       const genItem = (label: string): CompletionItem | undefined => {
-        const line = document.lineAt(position.line).text.trim()
         const triggers = commentTriggerMap[commentType]
-        const genAble = triggers.some(trigger => triggerChar === trigger.char && line.match(trigger.condition))
+        const genAble = triggers.some(trigger => triggerChar === trigger.char && trigger.condition())
 
         if (!genAble)
           return
@@ -199,4 +202,60 @@ export function appendText(editor: TextEditor, text: string) {
   const afterLines = fullText.split('\n').slice(line.lineNumber + 1).join('\n')
 
   return [beforeLines, newLine, afterLines].filter(s => s !== '').join('\n')
+}
+
+export function getSurroundTextBlock(document: TextDocument, position: Position) {
+  const curline = position.line
+  const block: string[] = []
+
+  for (let index = curline - 1; index >= 1; index--) {
+    const text = document.lineAt(index).text
+    if (!text.trim())
+      break
+
+    block.unshift(text)
+  }
+
+  block.push(document.lineAt(curline).text)
+
+  for (let index = curline + 1; index <= document.lineCount; index++) {
+    const text = document.lineAt(index).text
+    if (!text.trim())
+      break
+
+    block.push(text)
+  }
+
+  return block.join('\n')
+}
+
+export function isInsideBlockComment(): boolean {
+  const editor = useActiveTextEditor()
+
+  if (!editor.value)
+    return false
+
+  const selection = useTextEditorSelection(editor.value)
+  const textBeforeCursor = editor.value.document.getText(new Range(new Position(0, 0), selection.value.active))
+
+  const openComments = (textBeforeCursor.match(/\/\*/g) || []).length
+  const closeComments = (textBeforeCursor.match(/\*\//g) || []).length
+
+  return openComments > closeComments
+}
+
+export function isInsideLineComment(commentText = '//'): boolean {
+  const editor = useActiveTextEditor()
+
+  if (!editor.value)
+    return false
+
+  const selection = useTextEditorSelection(editor.value)
+  const cursorPosition = selection.value.active
+  const currentLineText = editor.value.document.lineAt(cursorPosition.line).text
+  const lineBeforeCursor = currentLineText.substring(0, cursorPosition.character)
+  const openStringLiterals = (lineBeforeCursor.match(/"/g) || []).length % 2 !== 0
+  const lastLineCommentIndex = lineBeforeCursor.lastIndexOf(commentText)
+
+  return lastLineCommentIndex !== -1 && !openStringLiterals
 }
