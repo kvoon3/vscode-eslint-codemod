@@ -98,6 +98,7 @@
     "@vscode/vsce": "catalog:cli",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
+    "eslint-plugin-command": "catalog:utils",
     "esno": "catalog:cli",
     "lint-staged": "catalog:cli",
     "ofetch": "catalog:utils",

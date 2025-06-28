@@ -31,11 +31,11 @@ In-editor guidance with examples, helping your master Comment-as-command.
 
 ## Todos
 
-- [ ] Support user-specific ESLint configuration
+- [x] `group` and `both` comment
 - [ ] Preview code change
-- [ ] Re-enable `tsdown`
 - [ ] Alias support
 - [ ] Lazy input
+- [ ] Re-enable `tsdown`
 
 ## Configurations
 

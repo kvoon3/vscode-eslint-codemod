@@ -1,46 +1,78 @@
+import type { Command } from 'eslint-plugin-command/commands'
 import type { CompletionItemProvider, Disposable, TextEditor } from 'vscode'
-import { objectKeys } from '@antfu/utils'
+import { objectEntries } from '@antfu/utils'
 import { ESLint, Linter } from 'eslint'
+import { builtinCommands } from 'eslint-plugin-command/commands'
 import { ofetch } from 'ofetch'
 import { useActiveTextEditor, useDisposable, watch } from 'reactive-vscode'
-import { CompletionItem, CompletionItemKind, CompletionList, languages, MarkdownString, SnippetString } from 'vscode'
+import { CompletionItem, CompletionItemKind, CompletionList, CompletionTriggerKind, languages, MarkdownString, SnippetString } from 'vscode'
 import { config } from './config'
-import { builtinCommandNames } from './generated/commands'
 import { getCurWorkspaceDir, logger } from './utils'
 
-const triggerConditionMap = {
-  '@': /\/\//,
-  ':': /\/\//,
-  '/': /\/\/\//,
+interface Trigger {
+  char: '/' | '@' | ':'
+  condition: RegExp
 }
 
-const triggerChars = objectKeys(triggerConditionMap)
-type TriggerChar = keyof typeof triggerConditionMap
+const lineTriggers: Trigger[] = [
+  { char: '/', condition: /\/\/\// },
+  { char: ':', condition: /\/\// },
+  { char: '@', condition: /\/\// },
+]
 
+const blockTriggers: Trigger[] = [
+  { char: '@', condition: /\/\*\*/ },
+]
+
+type CommentType = Exclude<Command['commentType'], undefined>
+
+const commentTriggerMap: Record<CommentType, Trigger[]> = {
+  line: lineTriggers,
+  block: blockTriggers,
+  both: [
+    ...lineTriggers,
+    ...blockTriggers,
+  ],
+}
+
+const triggerChars = objectEntries(commentTriggerMap).flatMap(([_, triggerInfo]) => triggerInfo.map(info => info.char))
+// type TriggerChar = typeof triggerChars[number]
+
+let triggerChar: string | undefined
 const provider: CompletionItemProvider = {
-  provideCompletionItems(document, position, _, { triggerCharacter }) {
-    function createCompletion(name: string): CompletionItem[] {
+  provideCompletionItems(document, position, _, { triggerCharacter, triggerKind }) {
+    if (triggerKind === CompletionTriggerKind.TriggerCharacter)
+      triggerChar = triggerCharacter
+
+    function createCompletion(command: Command): CompletionItem[] {
+      const { name, commentType = 'line' } = command
       const alias: string[] = []
 
-      const genItem = (label: string) => {
-        const line = document.lineAt(position.line).text.trim()
+      const items: CompletionItem[] = []
 
-        const condition = triggerConditionMap?.[triggerCharacter as TriggerChar]
-        if (!line.match(condition))
-          throw new Error('Not matched')
+      const genItem = (label: string): CompletionItem | undefined => {
+        const line = document.lineAt(position.line).text.trim()
+        const triggers = commentTriggerMap[commentType]
+        const genAble = triggers.some(trigger => triggerChar === trigger.char && line.match(trigger.condition))
+
+        if (!genAble)
+          return
 
         const item = new CompletionItem(label)
         item.filterText = label
 
         item.kind = CompletionItemKind.Snippet
-        item.detail = [name, ...alias]
-          .filter(i => i !== label)
-          .sort((a, b) =>
-            label === name
-              ? a.length - b.length // prefer short alias
-              : b.length - a.length, // prefer full name
-          )
-          .join(', ')
+        item.detail = commentType
+
+        // TODO: support alias
+        // item.detail = [name, ...alias]
+        //   .filter(i => i !== label)
+        //   .sort((a, b) =>
+        //     label === name
+        //       ? a.length - b.length // prefer short alias
+        //       : b.length - a.length, // prefer full name
+        //   )
+        //   .join(', ')
 
         // eslint-disable-next-line prefer-template
         const snippetLabel = ('${1:' + label + '}') // -> vscode snippet template: ${1: the-command-name}
@@ -52,15 +84,21 @@ const provider: CompletionItemProvider = {
         return item
       }
 
-      return [name, ...alias].map(genItem)
+      for (const label of [name, ...alias]) {
+        const item = genItem(label)
+        if (item)
+          items.push(item)
+      }
+
+      return items
     }
 
     try {
-      const list = builtinCommandNames.flatMap(i => createCompletion(i.name))
+      const list = builtinCommands.flatMap(i => createCompletion(i))
       return new CompletionList(list, true)
     }
-    catch {
-      return new CompletionList()
+    catch (error) {
+      logger.error('error', error)
     }
   },
   async resolveCompletionItem(item) {
@@ -84,10 +122,10 @@ const provider: CompletionItemProvider = {
           const linter = new Linter({ cwd })
 
           // FIXME: cannot lint code
-          const res = linter.verify(code, config, 'example.js')
+          linter.verify(code, config, 'example.js')
           // const res = await eslint.lintText(code)
           // const res = linter.value.verify(code, lintConfig.value, 'example.ts')
-          logger.log('res', res)
+          // logger.log('res', res)
         }
       }
       else {
