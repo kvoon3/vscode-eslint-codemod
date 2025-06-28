@@ -61,8 +61,7 @@
         "eslintCodemod.autocomplete.autoFix": {
           "type": "boolean",
           "default": true,
-          "description": "Auto fix code when autocomplete finish",
-          "scope": "application"
+          "description": "Auto fix code when autocomplete finish"
         },
         "eslintCodemod.autocomplete.docs": {
           "type": "boolean",
