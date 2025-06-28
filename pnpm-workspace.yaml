@@ -1,6 +1,5 @@
 packages:
   - playground
-catalog:
 catalogs:
   cli:
     '@antfu/eslint-config': ^4.15.0
@@ -22,7 +21,6 @@ catalogs:
     vscode-ext-gen: ^1.0.2
   types:
     '@types/node': ^24.0.3
-    '@types/vscode': ^1.97.0
   utils:
     '@antfu/utils': ^9.2.0
     eslint-plugin-command: ^3.3.1

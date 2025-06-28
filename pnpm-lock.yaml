@@ -18,18 +18,12 @@ catalogs:
     '@babel/traverse':
       specifier: ^7.27.7
       version: 7.27.7
-    '@vscode/vsce':
-      specifier: ^3.5.0
-      version: 3.5.0
     bumpp:
       specifier: ^10.2.0
       version: 10.2.0
     eslint:
       specifier: ^9.29.0
       version: 9.29.0
-    eslint-plugin-command:
-      specifier: ^3.3.1
-      version: 3.3.1
     esno:
       specifier: ^4.8.0
       version: 4.8.0
@@ -60,17 +54,21 @@ catalogs:
     vscode-ext-gen:
       specifier: ^1.0.2
       version: 1.0.2
+  default:
+    '@vscode/vsce':
+      specifier: ^3.5.0
+      version: 3.5.0
   types:
     '@types/node':
       specifier: ^24.0.3
       version: 24.0.3
-    '@types/vscode':
-      specifier: ^1.97.0
-      version: 1.101.0
   utils:
     '@antfu/utils':
       specifier: ^9.2.0
       version: 9.2.0
+    eslint-plugin-command:
+      specifier: ^3.3.1
+      version: 3.3.1
     ofetch:
       specifier: ^1.4.1
       version: 1.4.1
@@ -104,10 +102,10 @@ importers:
         specifier: catalog:types
         version: 24.0.3
       '@types/vscode':
-        specifier: catalog:types
+        specifier: ^1.97.0
         version: 1.101.0
       '@vscode/vsce':
-        specifier: catalog:cli
+        specifier: 'catalog:'
         version: 3.5.0
       bumpp:
         specifier: catalog:cli
@@ -116,7 +114,7 @@ importers:
         specifier: catalog:cli
         version: 9.29.0(jiti@2.4.2)
       eslint-plugin-command:
-        specifier: catalog:cli
+        specifier: catalog:utils
         version: 3.3.1(eslint@9.29.0(jiti@2.4.2))
       esno:
         specifier: catalog:cli

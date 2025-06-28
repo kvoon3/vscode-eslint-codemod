@@ -93,7 +93,7 @@
     "@babel/parser": "catalog:cli",
     "@babel/traverse": "catalog:cli",
     "@types/node": "catalog:types",
-    "@types/vscode": "catalog:types",
+    "@types/vscode": "^1.97.0",
     "@vscode/vsce": "catalog:cli",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
