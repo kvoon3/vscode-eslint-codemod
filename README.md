@@ -29,14 +29,6 @@ Apply transformations instantly — no `eslint --fix` or `formatOnSave` required
 
 In-editor guidance with examples, helping your master Comment-as-command.
 
-## Todos
-
-- [x] `group` and `both` comment
-- [ ] Preview code change
-- [ ] Alias support
-- [ ] Lazy input
-- [ ] Re-enable `tsdown`
-
 ## Configurations
 
 <!-- configs -->
@@ -58,6 +50,13 @@ In-editor guidance with examples, helping your master Comment-as-command.
 | `eslintCodemod.toggleAutoFix` | ESLint codemod: Toggle `autocomplete.autoFix` configuration |
 
 <!-- commands -->
+
+## Todos
+
+- [ ] Preview code change
+- [ ] Alias support
+- [ ] Lazy input
+- [ ] Re-enable `tsdown`
 
 ## License
 
