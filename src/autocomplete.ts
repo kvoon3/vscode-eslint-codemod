@@ -106,28 +106,50 @@ const provider: CompletionItemProvider = {
     }
   },
   async resolveCompletionItem(item) {
-    const label = typeof item.label === 'string'
+    const name = typeof item.label === 'string'
       ? item.label
       : item.label.label
 
-    const $documentation = Promise.all([
-      getMarkdownDocs(label),
-      getLintPatchString(label),
-    ]).then(([docs, patchString]) => {
-      return new MarkdownString([
-        ...(
-          patchString
-            ? ['```diff', patchString, '```']
-            : []
-        ),
-        '',
-        docs,
-      ].join('\n'))
-    })
+    let patchString: string = ''
+    let docs: string = ''
+
+    if (!(config.autocomplete.diff)) {
+      patchString = 'Diff is disabled.'
+    }
+    else {
+      try {
+        patchString = await getLintPatchString(name).then(code => ['```diff', code, '```'].join(`\n`))
+      }
+      catch (error: any) {
+        logger.error('error', error)
+        if (error?.message)
+          patchString = `**${`${error.message}` as string} ❌**`
+      }
+    }
+
+    if (!(config.autocomplete.docs)) {
+      docs = `See <https://eslint-plugin-command.antfu.me/commands/${name}>`
+    }
+    else {
+      try {
+        docs = await getMarkdownDocs(name)
+      }
+      catch (error) {
+        logger.error('error', error)
+        docs = `See <https://eslint-plugin-command.antfu.me/commands/${name}>`
+      }
+    }
+
+    const documentation = new MarkdownString([
+      patchString,
+      '',
+      docs,
+    ].join('\n'))
+    documentation.supportHtml = true
 
     return {
       ...item,
-      documentation: await $documentation,
+      documentation,
     }
   },
 }

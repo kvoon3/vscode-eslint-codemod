@@ -3,9 +3,8 @@ import { createPatch } from 'diff'
 import { ESLint } from 'eslint'
 import { computed, shallowRef, useActiveTextEditor, watchEffect } from 'reactive-vscode'
 import { Position, Range } from 'vscode'
-import { config } from './config'
 import { logger } from './log'
-import { appendText, getCurWorkspaceDir } from './utils'
+import { appendText, getCurWorkspaceDir, reject } from './utils'
 
 const editor = useActiveTextEditor()
 
@@ -32,15 +31,12 @@ export async function updateLintConfig(cwd?: string) {
 }
 
 export async function getLintDiff(commandName: string) {
-  if (!config.autocomplete.diff)
-    return
-
   const editor = useActiveTextEditor()
   if (!editor.value)
-    return
+    return reject('Cannot find active editor')
 
   if (!eslintConfig.value) {
-    return 'Cannot find eslint config'
+    return reject('Cannot find eslint config')
   }
 
   const code = appendText(editor.value, commandName)
@@ -60,14 +56,15 @@ export async function getLintDiff(commandName: string) {
   })
 
   const message = result.messages.find(i => i.ruleId === 'command/command')
-  logger.log('result', result)
-  logger.log('message', message)
+  if (!message) {
+    return reject('Unfixable')
+  }
 
-  if (!message?.fix) {
-    return '[Command] unfixable'
+  if (!message.fix) {
+    return reject(message.message || 'Unfixable')
   }
   if (!message.endLine || !message.endColumn) {
-    return '[Command] No available code find'
+    return reject('No available code find')
   }
 
   const beforeRange = new Range(
