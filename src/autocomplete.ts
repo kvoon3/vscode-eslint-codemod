@@ -66,7 +66,7 @@ const provider: CompletionItemProvider = {
         const item = new CompletionItem(label)
         item.filterText = label
 
-        item.kind = CompletionItemKind.Snippet
+        item.kind = CompletionItemKind.Text
         item.detail = commentType
 
         // TODO: support alias
@@ -79,9 +79,7 @@ const provider: CompletionItemProvider = {
         //   )
         //   .join(', ')
 
-        // eslint-disable-next-line prefer-template
-        const snippetLabel = ('${1:' + label + '}') // -> vscode snippet template: ${1: the-command-name}
-        item.insertText = new SnippetString(snippetLabel)
+        item.insertText = new SnippetString(label)
 
         if (config.autocomplete.autoFix)
           item.command = { title: 'fix code', command: 'eslint.executeAutofix' }
@@ -127,6 +125,10 @@ const provider: CompletionItemProvider = {
       logger.error('error', error)
       if (error?.message)
         fixable = `**❌ ${`${error.message}` as string}**`
+
+      // eslint-disable-next-line prefer-template
+      const snippetLabel = ('${1:' + name + '}') // -> vscode snippet template: ${1: the-command-name}
+      item.insertText = new SnippetString(snippetLabel)
     }
 
     if (!(config.autocomplete.docs)) {
