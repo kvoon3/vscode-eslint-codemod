@@ -33,11 +33,12 @@ In-editor guidance with examples, helping your master Comment-as-command.
 
 <!-- configs -->
 
-| Key                                  | Description                                       | Type      | Default                       |
-| ------------------------------------ | ------------------------------------------------- | --------- | ----------------------------- |
-| `eslintCodemod.languageIds`          |                                                   | `array`   | `["typescript","javascript"]` |
-| `eslintCodemod.autocomplete.autoFix` | Auto fix code when autocomplete finish            | `boolean` | `true`                        |
-| `eslintCodemod.autocomplete.docs`    | Whether open document content of selected command | `boolean` | `false`                       |
+| Key                                  | Description                     | Type      | Default                       |
+| ------------------------------------ | ------------------------------- | --------- | ----------------------------- |
+| `eslintCodemod.languageIds`          |                                 | `array`   | `["typescript","javascript"]` |
+| `eslintCodemod.autocomplete.autoFix` | Auto-fix code on autocomplete   | `boolean` | `true`                        |
+| `eslintCodemod.autocomplete.docs`    | Show docs for suggestions       | `boolean` | `false`                       |
+| `eslintCodemod.autocomplete.diff`    | Preview changes before applying | `boolean` | `true`                        |
 
 <!-- configs -->
 

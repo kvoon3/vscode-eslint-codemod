@@ -3,6 +3,7 @@ import { createPatch } from 'diff'
 import { ESLint } from 'eslint'
 import { computed, shallowRef, useActiveTextEditor, watchEffect } from 'reactive-vscode'
 import { Position, Range } from 'vscode'
+import { config } from './config'
 import { logger } from './log'
 import { appendText, getCurWorkspaceDir } from './utils'
 
@@ -31,6 +32,9 @@ export async function updateLintConfig(cwd?: string) {
 }
 
 export async function getLintDiff(commandName: string) {
+  if (!config.autocomplete.diff)
+    return
+
   const editor = useActiveTextEditor()
   if (!editor.value)
     return

@@ -61,12 +61,17 @@
         "eslintCodemod.autocomplete.autoFix": {
           "type": "boolean",
           "default": true,
-          "description": "Auto fix code when autocomplete finish"
+          "description": "Auto-fix code on autocomplete"
         },
         "eslintCodemod.autocomplete.docs": {
           "type": "boolean",
           "default": false,
-          "description": "Whether open document content of selected command"
+          "description": "Show docs for suggestions"
+        },
+        "eslintCodemod.autocomplete.diff": {
+          "type": "boolean",
+          "default": true,
+          "description": "Preview changes before applying"
         }
       }
     }

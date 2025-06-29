@@ -1,5 +1,6 @@
 {
   "eslintCodemod.autocomplete.docs": false,
+  "eslintCodemod.autocomplete.diff": false,
   "eslintCodemod.languageIds": [
     "typescript",
     "javascript",

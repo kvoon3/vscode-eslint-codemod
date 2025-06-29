@@ -9,15 +9,17 @@ watch(() => config.autocomplete.docs, () => {
 })
 
 export async function getMarkdownDocs(name: string) {
-  if (cachedContent.has(name))
-    return cachedContent.get(name)
-
   try {
     let content: string
-    if (config.autocomplete.docs)
+    if (config.autocomplete.docs) {
+      if (cachedContent.has(name))
+        return cachedContent.get(name)
+
       content = await ofetch(`https://raw.githubusercontent.com/antfu/eslint-plugin-command/refs/heads/main/src/commands/${name}.md`)
-    else
+    }
+    else {
       content = `See https://eslint-plugin-command.antfu.me/commands/${name}`
+    }
 
     cachedContent.set(name, content)
     return content

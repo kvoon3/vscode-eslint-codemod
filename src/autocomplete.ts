@@ -115,9 +115,11 @@ const provider: CompletionItemProvider = {
       getLintPatchString(label),
     ]).then(([docs, patchString]) => {
       return new MarkdownString([
-        '```diff',
-        patchString,
-        '```',
+        ...(
+          patchString
+            ? ['```diff', patchString, '```']
+            : []
+        ),
         '',
         docs,
       ].join('\n'))
