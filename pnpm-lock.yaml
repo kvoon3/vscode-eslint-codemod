@@ -121,6 +121,9 @@ importers:
       lint-staged:
         specifier: catalog:cli
         version: 16.1.2
+      local-pkg:
+        specifier: ^1.1.1
+        version: 1.1.1
       ofetch:
         specifier: catalog:utils
         version: 1.4.1

@@ -1,6 +1,7 @@
+import type { ESLint } from 'eslint'
 import { basename } from 'node:path'
 import { createPatch } from 'diff'
-import { ESLint } from 'eslint'
+import { importModule } from 'local-pkg'
 import { computed, shallowRef, useActiveTextEditor, watchEffect } from 'reactive-vscode'
 import { Position, Range } from 'vscode'
 import { logger } from './log'
@@ -17,7 +18,8 @@ export async function updateLintConfig(cwd?: string) {
   if (!cwd)
     return
 
-  const eslint = new ESLint({ cwd, fix: false })
+  const { ESLint } = await importModule('eslint')
+  const eslint: ESLint = new ESLint({ cwd, fix: false })
   const configPath = await eslint.findConfigFile()
 
   if (configPath) {
@@ -41,7 +43,8 @@ export async function getLintDiff(commandName: string) {
 
   const code = appendText(editor.value, commandName)
 
-  const eslint = new ESLint({
+  const { ESLint } = await importModule('eslint')
+  const eslint: ESLint = new ESLint({
     cwd: cwd.value,
     overrideConfigFile: true,
     overrideConfig: eslintConfig.value,

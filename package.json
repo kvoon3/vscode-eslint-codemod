@@ -110,6 +110,7 @@
     "eslint-plugin-command": "catalog:utils",
     "esno": "catalog:cli",
     "lint-staged": "catalog:cli",
+    "local-pkg": "^1.1.1",
     "ofetch": "catalog:utils",
     "pnpm": "catalog:cli",
     "reactive-vscode": "catalog:utils",
