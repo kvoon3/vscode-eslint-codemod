@@ -1,3 +1,16 @@
 {
-  "eslintCodemod.autocomplete.docs": true
+  "eslintCodemod.autocomplete.docs": false,
+  "eslintCodemod.languageIds": [
+    "typescript",
+    "javascript",
+    "vue"
+  ],
+  "autoHide.ui": {
+    "sidebar": true,
+    "auxiliaryBar": false,
+    "panel": true,
+    "references": false,
+    "notifications": true,
+    "cursor": false
+  }
 }

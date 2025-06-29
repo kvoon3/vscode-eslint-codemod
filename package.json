@@ -65,7 +65,7 @@
         },
         "eslintCodemod.autocomplete.docs": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Whether open document content of selected command"
         }
       }
@@ -103,8 +103,10 @@
     "ofetch": "catalog:utils",
     "pnpm": "catalog:cli",
     "reactive-vscode": "catalog:utils",
+    "regexp-tree": "^0.1.27",
     "scule": "catalog:utils",
     "simple-git-hooks": "catalog:cli",
+    "swc-plugin-node-cjs-interop": "^0.1.20",
     "tsdown": "catalog:cli",
     "tsup": "catalog:cli",
     "typescript": "catalog:cli",

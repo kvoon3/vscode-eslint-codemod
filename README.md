@@ -37,7 +37,7 @@ In-editor guidance with examples, helping your master Comment-as-command.
 | ------------------------------------ | ------------------------------------------------- | --------- | ----------------------------- |
 | `eslintCodemod.languageIds`          |                                                   | `array`   | `["typescript","javascript"]` |
 | `eslintCodemod.autocomplete.autoFix` | Auto fix code when autocomplete finish            | `boolean` | `true`                        |
-| `eslintCodemod.autocomplete.docs`    | Whether open document content of selected command | `boolean` | `true`                        |
+| `eslintCodemod.autocomplete.docs`    | Whether open document content of selected command | `boolean` | `false`                       |
 
 <!-- configs -->
 
@@ -53,10 +53,10 @@ In-editor guidance with examples, helping your master Comment-as-command.
 
 ## Todos
 
-- [ ] Preview code change
+- [x] Preview code changes
+- [ ] Highlight
 - [ ] Alias support
 - [ ] Lazy input
-- [ ] Re-enable `tsdown`
 
 ## License
 
