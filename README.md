@@ -16,6 +16,10 @@
   <img src="https://raw.githubusercontent.com/kvoon3/vscode-eslint-codemod/refs/heads/main/res/screenshot.png" />
 </p>
 
+> [!TIP]
+> Cannot see suggestion detail?
+> Try open it by keyboard shortcut. See: [VSCode intellisense](https://code.visualstudio.com/docs/editing/intellisense#_keyboard-shortcuts)
+
 ### ⚡ Intelligent Autocomplete
 
 Reducing manual typing and mental tax.
@@ -26,11 +30,11 @@ Apply transformations instantly — no `eslint --fix` or `formatOnSave` required
 
 ### 🔍 Preview Changes Before Apply
 
-See a clear diff
+See a clear diff of what will change.
 
 ### 📖 User-Friendly Documentation Hints
 
-In-editor guidance with examples, helping your master Comment-as-command.
+In-editor documentation (disabled by default).
 
 ## Configurations
 
