@@ -12,18 +12,21 @@
 <p align="center">Supercharge <a href="https://eslint-plugin-command.antfu.me">eslint-plugin-command</a> in VS Code</p>
 
 <p align="center">
+  <img src="https://raw.githubusercontent.com/kvoon3/vscode-eslint-codemod/refs/heads/main/res/screenshot-diff.png" />
   <img src="https://raw.githubusercontent.com/kvoon3/vscode-eslint-codemod/refs/heads/main/res/screenshot.png" />
 </p>
 
-## Why ?
-
 ### ⚡ Intelligent Autocomplete
 
-Context-aware suggestions for command, reducing manual typing and mental tax.
+Reducing manual typing and mental tax.
 
 ### 🔧 One-Click Auto Fix
 
 Apply transformations instantly — no `eslint --fix` or `formatOnSave` required.
+
+### 🔍 Preview Changes Before Apply
+
+See a clear diff
 
 ### 📖 User-Friendly Documentation Hints
 
@@ -55,7 +58,6 @@ In-editor guidance with examples, helping your master Comment-as-command.
 ## Todos
 
 - [x] Preview code changes
-- [ ] Highlight
 - [ ] Alias support
 - [ ] Lazy input
 
