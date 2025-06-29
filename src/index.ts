@@ -8,7 +8,7 @@ import { logger } from './log'
 const { activate, deactivate } = defineExtension(() => {
   logger.info(`${extensionId} activated`)
 
-  const enable = computed(() => !!eslintConfig.value)
+  const enable = computed(() => config.enable && !!eslintConfig.value)
 
   watchEffect(() => {
     enable.value

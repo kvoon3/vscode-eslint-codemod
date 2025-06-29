@@ -42,6 +42,7 @@ In-editor documentation (disabled by default).
 
 | Key                                  | Description                     | Type      | Default                       |
 | ------------------------------------ | ------------------------------- | --------- | ----------------------------- |
+| `eslintCodemod.enable`               | Whether enable extension        | `boolean` | `true`                        |
 | `eslintCodemod.languageIds`          |                                 | `array`   | `["typescript","javascript"]` |
 | `eslintCodemod.autocomplete.autoFix` | Auto-fix code on autocomplete   | `boolean` | `true`                        |
 | `eslintCodemod.autocomplete.docs`    | Show docs for suggestions       | `boolean` | `false`                       |

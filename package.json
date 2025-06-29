@@ -48,6 +48,11 @@
       "type": "object",
       "title": "ESLint Codemod configuration",
       "properties": {
+        "eslintCodemod.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether enable extension"
+        },
         "eslintCodemod.languageIds": {
           "type": "array",
           "default": [

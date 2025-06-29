@@ -1,4 +1,5 @@
 {
+  "eslintCodemod.enable": false,
   "eslintCodemod.autocomplete.docs": false,
   "eslintCodemod.autocomplete.diff": true,
   "eslintCodemod.languageIds": [
