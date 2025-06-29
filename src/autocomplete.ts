@@ -5,9 +5,10 @@ import { builtinCommands } from 'eslint-plugin-command/commands'
 import { useDisposable } from 'reactive-vscode'
 import { CompletionItem, CompletionItemKind, CompletionList, CompletionTriggerKind, languages, MarkdownString, SnippetString } from 'vscode'
 import { config } from './config'
-import { getMarkdownDocs } from './docs'
-import { getLintDiff as getLintPatchString } from './lint'
+import { configs } from './generated/meta'
+import { getLintDiff } from './lint'
 import { logger } from './log'
+import { getMarkdownDocs } from './markdown'
 import { isInsideBlockComment, isInsideLineComment } from './utils'
 
 interface Trigger {
@@ -110,21 +111,22 @@ const provider: CompletionItemProvider = {
       ? item.label
       : item.label.label
 
-    let patchString: string = ''
-    let docs: string = ''
+    let fixable = ''
+    let diffblock = ''
+    let docs = ''
 
-    if (!(config.autocomplete.diff)) {
-      patchString = 'Diff is disabled.'
+    try {
+      const text = await getLintDiff(name).then(code => ['```diff', code, '```'].join(`\n`))
+      diffblock = configs.autocompleteDiff
+        ? text
+        : 'Preview diff disabled.'
+
+      fixable = '**✅ Fixable**'
     }
-    else {
-      try {
-        patchString = await getLintPatchString(name).then(code => ['```diff', code, '```'].join(`\n`))
-      }
-      catch (error: any) {
-        logger.error('error', error)
-        if (error?.message)
-          patchString = `**${`${error.message}` as string} ❌**`
-      }
+    catch (error: any) {
+      logger.error('error', error)
+      if (error?.message)
+        fixable = `**❌ ${`${error.message}` as string}**`
     }
 
     if (!(config.autocomplete.docs)) {
@@ -141,7 +143,8 @@ const provider: CompletionItemProvider = {
     }
 
     const documentation = new MarkdownString([
-      patchString,
+      fixable,
+      diffblock,
       '',
       docs,
     ].join('\n'))
