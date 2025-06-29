@@ -26,7 +26,7 @@ export async function updateLintConfig(cwd?: string) {
       .catch(error => logger.error('error', error))
   }
   else {
-    return Promise.reject(new Error('Cannot find config file'))
+    return Promise.reject(new Error('Cannot find eslint config'))
   }
 }
 
@@ -73,11 +73,11 @@ export async function getLintDiff(commandName: string) {
   const { text } = message.fix
   const beforeText = editor.value.document.getText(beforeRange)
   const patchString = createPatch(
-    basename(filename),
+    filename,
     beforeText.trim(),
     text.trim(),
-    'current code',
-    commandName,
+    'old',
+    `new (${commandName})`,
     {
       ignoreWhitespace: true,
     },
