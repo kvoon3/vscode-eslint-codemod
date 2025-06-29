@@ -71,6 +71,7 @@ export async function getLintDiff(commandName: string) {
     new Position(message.line - 1, message.column - 1),
     new Position(message.endLine - 1, message.endColumn - 1),
   )
+  // FIXME: not much accurate for diff
   const { text } = message.fix
   const beforeText = editor.value.document.getText(beforeRange)
   const patchString = createPatch(

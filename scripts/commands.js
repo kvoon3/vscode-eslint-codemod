@@ -33,7 +33,7 @@ function extractCommands(code) {
       if (path.node.id.name === 'builtinCommands') {
         for (const el of path.node.init.elements) {
           let name = kebabCase(el.name)
-          // TODO: make a pr to correct typo of `hoist-reg-exp`
+          // TODO: make a typo fix pr
           if (name === 'hoist-reg-exp')
             name = 'hoist-regexp'
           commandNames.add(name)
