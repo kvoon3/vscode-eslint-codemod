@@ -40,13 +40,13 @@ In-editor documentation (disabled by default).
 
 <!-- configs -->
 
-| Key                                  | Description                     | Type      | Default                       |
-| ------------------------------------ | ------------------------------- | --------- | ----------------------------- |
-| `eslintCodemod.enable`               | Whether enable extension        | `boolean` | `true`                        |
-| `eslintCodemod.languageIds`          |                                 | `array`   | `["typescript","javascript"]` |
-| `eslintCodemod.autocomplete.autoFix` | Auto-fix code on autocomplete   | `boolean` | `true`                        |
-| `eslintCodemod.autocomplete.docs`    | Show docs for suggestions       | `boolean` | `false`                       |
-| `eslintCodemod.autocomplete.diff`    | Preview changes before applying | `boolean` | `true`                        |
+| Key                                  | Description                     | Type      | Default |
+| ------------------------------------ | ------------------------------- | --------- | ------- |
+| `eslintCodemod.enable`               | Whether enable extension        | `boolean` | `true`  |
+| `eslintCodemod.languageIds`          |                                 | `array`   | `["*"]` |
+| `eslintCodemod.autocomplete.autoFix` | Auto-fix code on autocomplete   | `boolean` | `true`  |
+| `eslintCodemod.autocomplete.docs`    | Show docs for suggestions       | `boolean` | `false` |
+| `eslintCodemod.autocomplete.diff`    | Preview changes before applying | `boolean` | `true`  |
 
 <!-- configs -->
 

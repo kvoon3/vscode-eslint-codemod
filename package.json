@@ -56,8 +56,7 @@
         "eslintCodemod.languageIds": {
           "type": "array",
           "default": [
-            "typescript",
-            "javascript"
+            "*"
           ],
           "items": {
             "type": "string"
