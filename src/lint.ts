@@ -1,7 +1,7 @@
 import type { ESLint } from 'eslint'
 import { basename } from 'node:path'
 import { createPatch } from 'diff'
-import { importModule } from 'local-pkg'
+import { importModule, resolveModule } from 'local-pkg'
 import { computed, shallowRef, useActiveTextEditor, watchEffect } from 'reactive-vscode'
 import { Position, Range } from 'vscode'
 import { logger } from './log'
@@ -15,20 +15,27 @@ export const eslintConfig = shallowRef<any>(undefined)
 watchEffect(() => updateLintConfig(cwd.value))
 
 export async function updateLintConfig(cwd?: string) {
-  if (!cwd)
-    return
+  try {
+    if (!cwd)
+      throw new Error('Unknown cwd')
 
-  const { ESLint } = await importModule('eslint')
-  const eslint: ESLint = new ESLint({ cwd, fix: false })
-  const configPath = await eslint.findConfigFile()
+    const modulePath = resolveModule('eslint', { paths: [cwd] })
 
-  if (configPath) {
-    eslintConfig.value = await import(configPath)
-      .then(i => i.default)
-      .catch(error => logger.error('error', error))
+    if (!modulePath)
+      throw new Error('Cannot find eslint module')
+
+    const module = await import(modulePath)
+    const { ESLint } = module
+    const eslint: ESLint = new ESLint({ cwd, fix: false })
+    const configPath = await eslint.findConfigFile()
+
+    if (!configPath)
+      throw new Error('Cannot find eslint config file')
+
+    eslintConfig.value = await import(configPath).then(i => i.default)
   }
-  else {
-    return Promise.reject(new Error('Cannot find eslint config'))
+  catch (error) {
+    logger.error('error', error)
   }
 }
 
