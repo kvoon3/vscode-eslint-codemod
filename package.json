@@ -2,7 +2,7 @@
   "publisher": "kvoon",
   "name": "vscode-eslint-codemod",
   "displayName": "ESLint Codemod",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": true,
   "packageManager": "pnpm@10.12.4",
   "description": "Supercharge eslint-plugin-command in VS Code",
@@ -103,11 +103,16 @@
     "@babel/traverse": "catalog:cli",
     "@types/node": "catalog:types",
     "@types/vscode": "^1.101.0",
+    "@typescript-eslint/parser": "^8.35.0",
     "@vscode/vsce": "catalog:cli",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
+    "eslint-merge-processors": "^2.0.0",
     "eslint-plugin-command": "catalog:utils",
+    "eslint-plugin-vue": "catalog:prod",
+    "eslint-processor-vue-blocks": "^2.0.0",
     "esno": "catalog:cli",
+    "globals": "^16.2.0",
     "lint-staged": "catalog:cli",
     "local-pkg": "catalog:utils",
     "ofetch": "catalog:utils",
@@ -118,9 +123,11 @@
     "tsdown": "catalog:cli",
     "tsup": "catalog:cli",
     "typescript": "catalog:cli",
+    "typescript-eslint": "catalog:prod",
     "vite": "catalog:cli",
     "vitest": "catalog:cli",
-    "vscode-ext-gen": "catalog:cli"
+    "vscode-ext-gen": "catalog:cli",
+    "vue-eslint-parser": "^10.1.4"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged"
