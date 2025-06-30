@@ -1,7 +1,7 @@
 import type { ESLint } from 'eslint'
 import { basename } from 'node:path'
 import { createPatch } from 'diff'
-import { importModule, resolveModule } from 'local-pkg'
+import { resolveModule } from 'local-pkg'
 import { computed, shallowRef, useActiveTextEditor, watchEffect } from 'reactive-vscode'
 import { Position, Range } from 'vscode'
 import { logger } from './log'
@@ -19,14 +19,8 @@ export async function updateLintConfig(cwd?: string) {
     if (!cwd)
       throw new Error('Unknown cwd')
 
-    const modulePath = resolveModule('eslint', { paths: [cwd] })
-
-    if (!modulePath)
-      throw new Error('Cannot find eslint module')
-
-    const module = await import(modulePath)
-    const { ESLint } = module
-    const eslint: ESLint = new ESLint({ cwd, fix: false })
+    const { ESLint } = await getESLintModule()
+    const eslint = new ESLint({ cwd, fix: false })
     const configPath = await eslint.findConfigFile()
 
     if (!configPath)
@@ -50,7 +44,7 @@ export async function getLintDiff(commandName: string) {
 
   const code = appendText(editor.value, commandName)
 
-  const { ESLint } = await importModule('eslint')
+  const { ESLint } = await getESLintModule()
   const eslint: ESLint = new ESLint({
     cwd: cwd.value,
     overrideConfigFile: true,
@@ -96,4 +90,17 @@ export async function getLintDiff(commandName: string) {
   )
 
   return patchString
+}
+
+async function getESLintModule() {
+  if (!cwd.value)
+    throw new Error('Unknown cwd')
+
+  const modulePath = resolveModule('eslint', { paths: [cwd.value] })
+
+  if (!modulePath)
+    throw new Error('Cannot find eslint module')
+
+  const module = await import(modulePath)
+  return module as { ESLint: new (options: ESLint.Options) => ESLint }
 }
