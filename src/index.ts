@@ -2,13 +2,12 @@ import { computed, defineExtension, useCommands, watch, watchEffect } from 'reac
 import { registerAutoComplete, unregisterAutoComplete } from './autocomplete'
 import { config } from './config'
 import { commands, extensionId } from './generated/meta'
-import { eslintConfig } from './lint'
 import { logger } from './log'
 
 const { activate, deactivate } = defineExtension(() => {
   logger.info(`${extensionId} activated`)
 
-  const enable = computed(() => config.enable && !!eslintConfig.value)
+  const enable = computed(() => config.enable)
 
   watchEffect(() => {
     enable.value

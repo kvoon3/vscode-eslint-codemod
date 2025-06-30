@@ -68,6 +68,9 @@ catalogs:
     eslint-plugin-command:
       specifier: ^3.3.1
       version: 3.3.1
+    local-pkg:
+      specifier: ^1.1.1
+      version: 1.1.1
     ofetch:
       specifier: ^1.4.1
       version: 1.4.1
@@ -118,14 +121,11 @@ importers:
       esno:
         specifier: catalog:cli
         version: 4.8.0
-      jiti:
-        specifier: ^2.4.2
-        version: 2.4.2
       lint-staged:
         specifier: catalog:cli
         version: 16.1.2
       local-pkg:
-        specifier: ^1.1.1
+        specifier: catalog:utils
         version: 1.1.1
       ofetch:
         specifier: catalog:utils
@@ -136,18 +136,12 @@ importers:
       reactive-vscode:
         specifier: catalog:utils
         version: 0.3.0(@types/vscode@1.101.0)
-      regexp-tree:
-        specifier: ^0.1.27
-        version: 0.1.27
       scule:
         specifier: catalog:utils
         version: 1.3.0
       simple-git-hooks:
         specifier: catalog:cli
         version: 2.13.0
-      swc-plugin-node-cjs-interop:
-        specifier: ^0.1.20
-        version: 0.1.20
       tsdown:
         specifier: catalog:cli
         version: 0.12.9(typescript@5.8.3)
@@ -157,9 +151,6 @@ importers:
       typescript:
         specifier: catalog:cli
         version: 5.8.3
-      typescript-eslint:
-        specifier: ^8.35.0
-        version: 8.35.0(eslint@9.30.0(jiti@2.4.2))(typescript@5.8.3)
       vite:
         specifier: catalog:cli
         version: 7.0.0(@types/node@24.0.7)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.8.0)
@@ -2789,10 +2780,6 @@ packages:
     resolution: {integrity: sha512-A0RVJrX+IUkVZbW3ClroRWurercFhieevHB38sr2+l9eUClMqome3LmEmnhlNy+5Mr2EYN6B2Kaw9wYdd+VHiw==}
     engines: {node: '>=4'}
 
-  postcss@8.5.5:
-    resolution: {integrity: sha512-d/jtm+rdNT8tpXuHY5MMtcbJFBkhXE6593XVR9UoGCH8jSFGci7jGvMGH5RYd5PBJW+00NZQt6gf7CbagJCrhg==}
-    engines: {node: ^10 || ^12 || >=14}
-
   postcss@8.5.6:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
@@ -3100,9 +3087,6 @@ packages:
     resolution: {integrity: sha512-RpsAZlpWcDwOPQA22aCH4J0t7L8JmAvsCxfOSEwm7cQs3LshN36QaTkwd70DnBOXDWGssw2eUoc8CaRWT0XunA==}
     engines: {node: '>=8'}
 
-  swc-plugin-node-cjs-interop@0.1.20:
-    resolution: {integrity: sha512-u3qNeQF66wH5jI5Pnr+dmGkpsDU8RnI8WzvKSXNgFcW2DuvY7jyfiF2o5YU8Yu+/KGI2ygtXgWoQ+NBVFqwsIw==}
-
   synckit@0.6.2:
     resolution: {integrity: sha512-Vhf+bUa//YSTYKseDiiEuQmhGCoIF3CVBhunm3r/DQnYiGT4JssmnKQc44BIyOZRK2pKjXXAgbhfmbeoC9CJpA==}
     engines: {node: '>=12.20'}
@@ -3272,13 +3256,6 @@ packages:
 
   typed-rest-client@1.8.11:
     resolution: {integrity: sha512-5UvfMpd1oelmUPRbbaVnq+rHP7ng2cE4qoQkQeAqxRL6PklkxsM0g32/HL0yfvruK6ojQ5x8EE+HF4YV6DtuCA==}
-
-  typescript-eslint@8.35.0:
-    resolution: {integrity: sha512-uEnz70b7kBz6eg/j0Czy6K5NivaYopgxRjsnAJ2Fx5oTLo3wefTHIbL7AkQr1+7tJCRVpTs/wiM8JR/11Loq9A==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-    peerDependencies:
-      eslint: ^8.57.0 || ^9.0.0
-      typescript: '>=4.8.4 <5.9.0'
 
   typescript@5.8.3:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
@@ -4529,7 +4506,7 @@ snapshots:
       '@vue/shared': 3.4.27
       estree-walker: 2.0.2
       magic-string: 0.30.17
-      postcss: 8.5.5
+      postcss: 8.5.6
       source-map-js: 1.2.1
 
   '@vue/compiler-ssr@3.4.27':
@@ -5283,7 +5260,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.7
+      '@types/estree': 1.0.8
 
   esutils@2.0.3: {}
 
@@ -6360,12 +6337,6 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss@8.5.5:
-    dependencies:
-      nanoid: 3.3.11
-      picocolors: 1.1.1
-      source-map-js: 1.2.1
-
   postcss@8.5.6:
     dependencies:
       nanoid: 3.3.11
@@ -6739,8 +6710,6 @@ snapshots:
       has-flag: 4.0.0
       supports-color: 7.2.0
 
-  swc-plugin-node-cjs-interop@0.1.20: {}
-
   synckit@0.6.2:
     dependencies:
       tslib: 2.8.1
@@ -6917,16 +6886,6 @@ snapshots:
       qs: 6.11.2
       tunnel: 0.0.6
       underscore: 1.13.6
-
-  typescript-eslint@8.35.0(eslint@9.30.0(jiti@2.4.2))(typescript@5.8.3):
-    dependencies:
-      '@typescript-eslint/eslint-plugin': 8.35.0(@typescript-eslint/parser@8.35.0(eslint@9.30.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.30.0(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/parser': 8.35.0(eslint@9.30.0(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/utils': 8.35.0(eslint@9.30.0(jiti@2.4.2))(typescript@5.8.3)
-      eslint: 9.30.0(jiti@2.4.2)
-      typescript: 5.8.3
-    transitivePeerDependencies:
-      - supports-color
 
   typescript@5.8.3: {}
 
