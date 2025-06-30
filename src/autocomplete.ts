@@ -5,7 +5,6 @@ import { builtinCommands } from 'eslint-plugin-command/commands'
 import { useDisposable } from 'reactive-vscode'
 import { CompletionItem, CompletionItemKind, CompletionList, CompletionTriggerKind, languages, MarkdownString, SnippetString } from 'vscode'
 import { config } from './config'
-import { configs } from './generated/meta'
 import { getLintDiff } from './lint'
 import { logger } from './log'
 import { getMarkdownDocs } from './markdown'
@@ -115,7 +114,7 @@ const provider: CompletionItemProvider = {
 
     try {
       const text = await getLintDiff(name).then(code => ['```diff', code, '```'].join(`\n`))
-      diffblock = configs.autocompleteDiff
+      diffblock = config.autocomplete.diff
         ? text
         : 'Preview diff disabled.'
 
