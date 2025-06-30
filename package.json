@@ -107,12 +107,7 @@
     "@vscode/vsce": "catalog:cli",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
-    "eslint-merge-processors": "^2.0.0",
-    "eslint-plugin-command": "catalog:utils",
-    "eslint-plugin-vue": "catalog:prod",
-    "eslint-processor-vue-blocks": "^2.0.0",
     "esno": "catalog:cli",
-    "globals": "^16.2.0",
     "lint-staged": "catalog:cli",
     "local-pkg": "catalog:utils",
     "ofetch": "catalog:utils",
@@ -123,11 +118,9 @@
     "tsdown": "catalog:cli",
     "tsup": "catalog:cli",
     "typescript": "catalog:cli",
-    "typescript-eslint": "catalog:prod",
     "vite": "catalog:cli",
     "vitest": "catalog:cli",
-    "vscode-ext-gen": "catalog:cli",
-    "vue-eslint-parser": "^10.1.4"
+    "vscode-ext-gen": "catalog:cli"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged"
