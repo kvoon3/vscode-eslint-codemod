@@ -51,7 +51,7 @@ const provider: CompletionItemProvider = {
 
     function createCompletion(command: Command): CompletionItem[] {
       const { name, commentType = 'line' } = command
-      const alias: string[] = []
+      const alias = (config?.alias?.[name] || []) as string[]
 
       const items: CompletionItem[] = []
 
@@ -64,19 +64,16 @@ const provider: CompletionItemProvider = {
 
         const item = new CompletionItem(label)
         item.filterText = label
-
         item.kind = CompletionItemKind.Text
-        item.detail = commentType
 
-        // TODO: support alias
-        // item.detail = [name, ...alias]
-        //   .filter(i => i !== label)
-        //   .sort((a, b) =>
-        //     label === name
-        //       ? a.length - b.length // prefer short alias
-        //       : b.length - a.length, // prefer full name
-        //   )
-        //   .join(', ')
+        item.detail = [name, ...alias]
+          .filter(i => i !== label)
+          .sort((a, b) =>
+            label === name
+              ? a.length - b.length // prefer short alias
+              : b.length - a.length, // prefer full name
+          )
+          .join(', ')
 
         item.insertText = new SnippetString(label)
 

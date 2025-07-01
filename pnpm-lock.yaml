@@ -65,9 +65,6 @@ catalogs:
     '@antfu/utils':
       specifier: ^9.2.0
       version: 9.2.0
-    eslint-plugin-command:
-      specifier: ^3.3.1
-      version: 3.3.1
     local-pkg:
       specifier: ^1.1.1
       version: 1.1.1
@@ -106,6 +103,9 @@ importers:
       '@types/vscode':
         specifier: ^1.101.0
         version: 1.101.0
+      '@typescript-eslint/parser':
+        specifier: ^8.35.0
+        version: 8.35.0(eslint@9.30.0(jiti@2.4.2))(typescript@5.8.3)
       '@vscode/vsce':
         specifier: catalog:cli
         version: 3.6.0
@@ -115,9 +115,6 @@ importers:
       eslint:
         specifier: catalog:cli
         version: 9.30.0(jiti@2.4.2)
-      eslint-plugin-command:
-        specifier: catalog:utils
-        version: 3.3.1(eslint@9.30.0(jiti@2.4.2))
       esno:
         specifier: catalog:cli
         version: 4.8.0
@@ -1088,10 +1085,6 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
       typescript: '>=4.8.4 <5.9.0'
-
-  '@typescript-eslint/types@8.34.1':
-    resolution: {integrity: sha512-rjLVbmE7HR18kDsjNIZQHxmv9RZwlgzavryL5Lnj2ujIRTeXlKtILHgRNmQ3j4daw7zd+mQgy+uyt6Zo6I0IGA==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@typescript-eslint/types@8.35.0':
     resolution: {integrity: sha512-0mYH3emanku0vHw2aRLNGqe7EXh9WHEhi7kZzscrMDf6IIRUQ5Jk4wp1QrledE/36KtdZrVfKnE32eZCf/vaVQ==}
@@ -3702,7 +3695,7 @@ snapshots:
   '@es-joy/jsdoccomment@0.50.2':
     dependencies:
       '@types/estree': 1.0.7
-      '@typescript-eslint/types': 8.34.1
+      '@typescript-eslint/types': 8.35.0
       comment-parser: 1.4.1
       esquery: 1.6.0
       jsdoc-type-pratt-parser: 4.1.0
@@ -4320,8 +4313,6 @@ snapshots:
       typescript: 5.8.3
     transitivePeerDependencies:
       - supports-color
-
-  '@typescript-eslint/types@8.34.1': {}
 
   '@typescript-eslint/types@8.35.0': {}
 

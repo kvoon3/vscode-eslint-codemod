@@ -76,6 +76,24 @@
           "type": "boolean",
           "default": true,
           "description": "Preview changes before applying"
+        },
+        "eslintCodemod.alias": {
+          "type": "object",
+          "default": {
+            "hoist-regexp": ["hreg"],
+            "inline-arrow": ["ia"],
+            "no-shorthand": ["nsh"],
+            "no-type": ["nt"],
+            "reverse-if-else": ["rife", "rif"],
+            "to-arrow": ["2a"],
+            "to-destructuring": ["2dest"],
+            "to-function": ["2f"],
+            "to-one-line": ["21l"],
+            "to-promise-all": ["2pa"],
+            "to-string-literal": ["2string-literal", "2sl"],
+            "to-template-literal": ["2template-literal", "2tl"],
+            "to-ternary": ["23"]
+          }
         }
       }
     }
