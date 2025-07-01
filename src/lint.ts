@@ -2,7 +2,7 @@ import type { ESLint } from 'eslint'
 import { basename } from 'node:path'
 import { createPatch } from 'diff'
 import { resolveModule } from 'local-pkg'
-import { computed, shallowRef, useActiveTextEditor, watchEffect } from 'reactive-vscode'
+import { computed, useActiveTextEditor, watchEffect } from 'reactive-vscode'
 import { Position, Range } from 'vscode'
 import { logger } from './log'
 import { appendText, getCurWorkspaceDir, reject } from './utils'
@@ -10,7 +10,8 @@ import { appendText, getCurWorkspaceDir, reject } from './utils'
 const editor = useActiveTextEditor()
 
 export const cwd = computed(() => editor.value ? getCurWorkspaceDir(editor.value.document) : undefined)
-export const eslintConfig = shallowRef<any>(undefined)
+let eslintConfig: any
+let eslint: ESLint | undefined
 
 watchEffect(() => updateLintConfig(cwd.value))
 
@@ -20,36 +21,31 @@ export async function updateLintConfig(cwd?: string) {
       throw new Error('Unknown cwd')
 
     const { ESLint } = await getESLintModule()
-    const eslint = new ESLint({ cwd, fix: false })
+    eslint = new ESLint({ cwd, fix: false, cache: false })
     const configPath = await eslint.findConfigFile()
 
     if (!configPath)
       throw new Error('Cannot find eslint config file')
 
-    eslintConfig.value = await import(configPath).then(i => i.default)
+    eslintConfig = await import(configPath).then(i => i.default)
   }
   catch (error) {
     logger.error('error', error)
   }
 }
 
-export async function getLintDiff(commandName: string) {
+export async function getLintDiff(commandName: string): Promise<string | undefined> {
   const editor = useActiveTextEditor()
   if (!editor.value)
     return reject('Cannot find active editor')
 
-  if (!eslintConfig.value) {
+  if (!eslintConfig)
     return reject('Cannot find eslint config')
-  }
+
+  if (!eslint)
+    return reject('ESLint not loaded')
 
   const code = appendText(editor.value, commandName)
-
-  const { ESLint } = await getESLintModule()
-  const eslint: ESLint = new ESLint({
-    cwd: cwd.value,
-    overrideConfigFile: true,
-    overrideConfig: eslintConfig.value,
-  })
 
   const filePath = editor.value.document.fileName
   const filename = basename(filePath)
@@ -59,16 +55,22 @@ export async function getLintDiff(commandName: string) {
     warnIgnored: true,
   })
 
-  const message = result.messages.find(i => i.ruleId === 'command/command')
-  if (!message) {
-    return reject('Unfixable')
-  }
+  const commandMessages = result.messages.filter(i => i.ruleId === 'command/command')
 
-  if (!message.fix) {
-    return reject(message.message || 'Unfixable')
-  }
-  if (!message.endLine || !message.endColumn) {
-    return reject('No available code find')
+  const errMsg = commandMessages.find(i => ['command-error', 'command-error-cause'].includes(i.messageId || ''))?.message
+  if (errMsg)
+    return reject(errMsg)
+
+  const message = commandMessages.find(i => i.messageId === 'command-fix')
+
+  if (
+    !message?.fix
+    || !message.endLine
+    || !message.endColumn
+  ) {
+    // unfixable but log it in vscode output
+    logger.log('result', result)
+    return undefined
   }
 
   const beforeRange = new Range(

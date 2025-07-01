@@ -81,19 +81,48 @@
           "type": "object",
           "description": "Command name alias",
           "default": {
-            "hoist-regexp": ["hreg"],
-            "inline-arrow": ["ia"],
-            "no-shorthand": ["nsh"],
-            "no-type": ["nt"],
-            "reverse-if-else": ["rife", "rif"],
-            "to-arrow": ["2a"],
-            "to-destructuring": ["2dest"],
-            "to-function": ["2f"],
-            "to-one-line": ["21l"],
-            "to-promise-all": ["2pa"],
-            "to-string-literal": ["2string-literal", "2sl"],
-            "to-template-literal": ["2template-literal", "2tl"],
-            "to-ternary": ["23"]
+            "hoist-regexp": [
+              "hreg"
+            ],
+            "inline-arrow": [
+              "ia"
+            ],
+            "no-shorthand": [
+              "nsh"
+            ],
+            "no-type": [
+              "nt"
+            ],
+            "reverse-if-else": [
+              "rife",
+              "rif"
+            ],
+            "to-arrow": [
+              "2a"
+            ],
+            "to-destructuring": [
+              "2dest"
+            ],
+            "to-function": [
+              "2f"
+            ],
+            "to-one-line": [
+              "21l"
+            ],
+            "to-promise-all": [
+              "2pa"
+            ],
+            "to-string-literal": [
+              "2string-literal",
+              "2sl"
+            ],
+            "to-template-literal": [
+              "2template-literal",
+              "2tl"
+            ],
+            "to-ternary": [
+              "23"
+            ]
           }
         }
       }
@@ -122,7 +151,6 @@
     "@babel/traverse": "catalog:cli",
     "@types/node": "catalog:types",
     "@types/vscode": "^1.101.0",
-    "@typescript-eslint/parser": "^8.35.0",
     "@vscode/vsce": "catalog:cli",
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",

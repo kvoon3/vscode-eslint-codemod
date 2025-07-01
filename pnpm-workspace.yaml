@@ -19,6 +19,8 @@ catalogs:
     vite: ^7.0.0
     vitest: ^3.2.4
     vscode-ext-gen: ^1.1.0
+  playground:
+    vue: ^3.5.17
   types:
     '@types/eslint': ^9.6.1
     '@types/node': ^24.0.7

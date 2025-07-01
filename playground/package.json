@@ -10,6 +10,8 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "eslint": "catalog:cli"
+    "eslint": "catalog:cli",
+    "typescript": "catalog:cli",
+    "vue": "catalog:playground"
   }
 }

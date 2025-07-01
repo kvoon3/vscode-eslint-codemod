@@ -110,12 +110,13 @@ const provider: CompletionItemProvider = {
     let docs = ''
 
     try {
-      const text = await getLintDiff(name).then(code => ['```diff', code, '```'].join(`\n`))
+      const diffcode = await getLintDiff(name)
       diffblock = config.autocomplete.diff
-        ? text
+        ? ['```diff', diffcode, '```'].join(`\n`)
         : 'Preview diff disabled.'
 
-      fixable = '**✅ Fixable**'
+      if (diffcode)
+        fixable = '**✅ Fixable**'
     }
     catch (error: any) {
       logger.error('error', error)
@@ -145,7 +146,7 @@ const provider: CompletionItemProvider = {
       diffblock,
       '',
       docs,
-    ].join('\n'))
+    ].join('\n').trim())
     documentation.supportHtml = true
 
     return {
