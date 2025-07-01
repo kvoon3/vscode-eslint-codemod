@@ -14,10 +14,5 @@ export const logger = {
 }
 
 export function $inspect(...args: MaybeRef<any>[]) {
-  watch(() => args, (values) => {
-    for (const arg of values) {
-      logger.log(JSON.stringify(arg, null, 2))
-      // _logger.info(JSON.stringify(arg, null, 2))
-    }
-  })
+  watch(() => args, logger.log)
 }
