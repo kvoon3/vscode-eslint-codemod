@@ -131,9 +131,8 @@
   "scripts": {
     "build": "tsup src/index.ts --external vscode",
     "dev": "nr build --watch --sourcemap",
-    "prepare": "nr update && nr update:commands",
+    "prepare": "nr update",
     "update": "vscode-ext-gen --output src/generated/meta.ts --scope eslintCodemod",
-    "update:commands": "node scripts/commands.js",
     "lint": "eslint .",
     "vscode:prepublish": "nr build",
     "publish": "vsce publish --no-dependencies",
