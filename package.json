@@ -2,7 +2,7 @@
   "publisher": "kvoon",
   "name": "vscode-eslint-codemod",
   "displayName": "ESLint Codemod",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "private": true,
   "packageManager": "pnpm@10.12.4",
   "description": "Supercharge eslint-plugin-command in VS Code",
