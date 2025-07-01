@@ -79,6 +79,7 @@
         },
         "eslintCodemod.alias": {
           "type": "object",
+          "description": "Command name alias",
           "default": {
             "hoist-regexp": ["hreg"],
             "inline-arrow": ["ia"],

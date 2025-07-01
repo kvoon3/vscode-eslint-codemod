@@ -47,7 +47,7 @@ In-editor documentation (disabled by default).
 | `eslintCodemod.autocomplete.autoFix` | Auto-fix code on autocomplete   | `boolean` | `true`           |
 | `eslintCodemod.autocomplete.docs`    | Show docs for suggestions       | `boolean` | `false`          |
 | `eslintCodemod.autocomplete.diff`    | Preview changes before applying | `boolean` | `true`           |
-| `eslintCodemod.alias`                |                                 | `object`  | See package.json |
+| `eslintCodemod.alias`                | Command name alias              | `object`  | See package.json |
 
 <!-- configs -->
 
@@ -64,7 +64,7 @@ In-editor documentation (disabled by default).
 ## Todos
 
 - [x] Preview code changes
-- [ ] Alias support
+- [x] Alias support
 - [ ] Lazy input
 
 ## License
