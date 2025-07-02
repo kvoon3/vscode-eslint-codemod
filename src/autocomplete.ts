@@ -26,6 +26,7 @@ const lineTriggers: Trigger[] = [
 
 const blockTriggers: Trigger[] = [
   /** @ */
+  /* @ */
   { char: '@', condition: isInsideBlockComment },
 ]
 
@@ -40,7 +41,10 @@ const commentTriggerMap: Record<CommentType, Trigger[]> = {
   ],
 }
 
-const triggerChars = objectEntries(commentTriggerMap).flatMap(([_, triggerInfo]) => triggerInfo.map(info => info.char))
+const triggerChars = Array.from(new Set(
+  objectEntries(commentTriggerMap)
+    .flatMap(([_, triggerInfo]) => triggerInfo.map(info => info.char)),
+))
 // type TriggerChar = typeof triggerChars[number]
 
 let triggerChar: string | undefined
@@ -73,7 +77,7 @@ const provider: CompletionItemProvider = {
               ? a.length - b.length // prefer short alias
               : b.length - a.length, // prefer full name
           )
-          .join(', ')
+          .join(',')
 
         item.insertText = new SnippetString(label)
 

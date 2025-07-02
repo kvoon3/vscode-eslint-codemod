@@ -56,7 +56,7 @@ export function isInsideBlockComment(): boolean {
   const selection = useTextEditorSelection(editor.value)
   const textBeforeCursor = editor.value.document.getText(new Range(new Position(0, 0), selection.value.active))
 
-  const openComments = (textBeforeCursor.match(/\/\*/g) || []).length
+  const openComments = (textBeforeCursor.match(/\/\*/g) || []).length + (textBeforeCursor.match(/\/\*\*/g) || []).length
   const closeComments = (textBeforeCursor.match(/\*\//g) || []).length
 
   return openComments > closeComments

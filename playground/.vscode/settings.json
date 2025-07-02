@@ -9,5 +9,13 @@
     "references": false,
     "notifications": true,
     "cursor": false
-  }
+  },
+  "editor.acceptSuggestionOnCommitCharacter": true,
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.quickSuggestions": {
+    "comments": "on",
+    "other": "on",
+    "strings": "on"
+  },
+  "typescript.suggest.enabled": false
 }
