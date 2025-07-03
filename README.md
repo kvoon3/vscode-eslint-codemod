@@ -36,16 +36,6 @@ In-editor documentation (disabled by default).
 > #### Cannot see suggestion detail?
 >
 > Try open it by keyboard shortcut. See: [VSCode intellisense](https://code.visualstudio.com/docs/editing/intellisense#_keyboard-shortcuts)
->
-> #### Not seeing code changes in TS/Vue files?
->
-> If using `@antfu/eslint-config`, ensure you explicitly enable these features:
->
-> ```js
-> export default antfu({ typescript: true, vue: true })
-> ```
->
-> This should be resolved in future updates.
 
 ## Configurations
 
