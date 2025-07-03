@@ -1,8 +1,9 @@
-import type { ESLint } from 'eslint'
+import type { ESLint, Linter } from 'eslint'
 import { basename } from 'node:path'
+import process from 'node:process'
 import { createPatch } from 'diff'
 import { resolveModule } from 'local-pkg'
-import { computed, useActiveTextEditor, watchEffect } from 'reactive-vscode'
+import { computed, useActiveTextEditor, watch } from 'reactive-vscode'
 import { Position, Range } from 'vscode'
 import { logger } from './log'
 import { appendText, getCurWorkspaceDir, reject } from './utils'
@@ -10,15 +11,24 @@ import { appendText, getCurWorkspaceDir, reject } from './utils'
 const editor = useActiveTextEditor()
 
 export const cwd = computed(() => editor.value ? getCurWorkspaceDir(editor.value.document) : undefined)
-let eslintConfig: any
+let eslintConfig: Linter.Config
 let eslint: ESLint | undefined
 
-watchEffect(() => updateLintConfig(cwd.value))
+const { stop } = watch(cwd, async (value) => {
+  if (!value)
+    return
+
+  await updateLintConfig(value)
+  stop()
+}, { immediate: true })
 
 export async function updateLintConfig(cwd?: string) {
   try {
     if (!cwd)
       throw new Error('Unknown cwd')
+
+    // change vscode cwd to actual project cwd
+    process.chdir(cwd)
 
     const { ESLint } = await getESLintModule()
     eslint = new ESLint({ cwd, fix: false, cache: false })
@@ -27,7 +37,10 @@ export async function updateLintConfig(cwd?: string) {
     if (!configPath)
       throw new Error('Cannot find eslint config file')
 
-    eslintConfig = await import(configPath).then(i => i.default)
+    eslintConfig = await import('importx').then(x => x.import(configPath, {
+      parentURL: cwd,
+      cache: false,
+    }))
   }
   catch (error) {
     logger.error('error', error)
