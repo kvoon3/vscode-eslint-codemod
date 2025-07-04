@@ -129,7 +129,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --external vscode",
+    "build": "tsdown src/index.ts --external vscode",
     "dev": "nr build --watch --sourcemap",
     "prepare": "nr update",
     "update": "vscode-ext-gen --output src/generated/meta.ts --scope eslintCodemod",
@@ -162,7 +162,6 @@
     "scule": "catalog:utils",
     "simple-git-hooks": "catalog:cli",
     "tsdown": "catalog:cli",
-    "tsup": "catalog:cli",
     "typescript": "catalog:cli",
     "vite": "catalog:cli",
     "vitest": "catalog:cli",
