@@ -154,7 +154,6 @@
     "bumpp": "catalog:cli",
     "eslint": "catalog:cli",
     "esno": "catalog:cli",
-    "importx": "catalog:utils",
     "lint-staged": "catalog:cli",
     "local-pkg": "catalog:utils",
     "ofetch": "catalog:utils",

@@ -37,10 +37,7 @@ export async function updateLintConfig(cwd?: string) {
     if (!configPath)
       throw new Error('Cannot find eslint config file')
 
-    eslintConfig = await import('importx').then(x => x.import(configPath, {
-      parentURL: cwd,
-      cache: false,
-    }))
+    eslintConfig = await import(configPath)
   }
   catch (error) {
     logger.error('error', error)

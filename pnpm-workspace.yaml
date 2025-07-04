@@ -27,7 +27,6 @@ catalogs:
   utils:
     '@antfu/utils': ^9.2.0
     eslint-plugin-command: ^3.3.1
-    importx: ^0.5.2
     local-pkg: ^1.1.1
     ofetch: ^1.4.1
     reactive-vscode: ^0.3.0

@@ -69,9 +69,6 @@ catalogs:
     '@antfu/utils':
       specifier: ^9.2.0
       version: 9.2.0
-    importx:
-      specifier: ^0.5.2
-      version: 0.5.2
     local-pkg:
       specifier: ^1.1.1
       version: 1.1.1
@@ -122,9 +119,6 @@ importers:
       esno:
         specifier: catalog:cli
         version: 4.8.0
-      importx:
-        specifier: catalog:utils
-        version: 0.5.2
       lint-staged:
         specifier: catalog:cli
         version: 16.1.2
@@ -2129,9 +2123,6 @@ packages:
   import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
-
-  importx@0.5.2:
-    resolution: {integrity: sha512-YEwlK86Ml5WiTxN/ECUYC5U7jd1CisAVw7ya4i9ZppBoHfFkT2+hChhr3PE2fYxUKLkNyivxEQpa5Ruil1LJBQ==}
 
   imurmurhash@0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
@@ -5558,17 +5549,6 @@ snapshots:
     dependencies:
       parent-module: 1.0.1
       resolve-from: 4.0.0
-
-  importx@0.5.2:
-    dependencies:
-      bundle-require: 5.1.0(esbuild@0.25.5)
-      debug: 4.4.1
-      esbuild: 0.25.5
-      jiti: 2.4.2
-      pathe: 2.0.3
-      tsx: 4.19.2
-    transitivePeerDependencies:
-      - supports-color
 
   imurmurhash@0.1.4: {}
 
