@@ -77,6 +77,11 @@
           "default": true,
           "description": "Preview changes before applying"
         },
+        "eslintCodemod.autocomplete.onlyFixable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Only suggest command that can be fixed"
+        },
         "eslintCodemod.alias": {
           "type": "object",
           "description": "Command name alias",

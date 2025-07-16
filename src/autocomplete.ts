@@ -5,7 +5,7 @@ import { builtinCommands } from 'eslint-plugin-command/commands'
 import { useDisposable } from 'reactive-vscode'
 import { CompletionItem, CompletionItemKind, CompletionList, CompletionTriggerKind, languages, MarkdownString, SnippetString } from 'vscode'
 import { config } from './config'
-import { getLintDiff } from './lint'
+import { getFixableLintMessage, getLintDiff } from './lint'
 import { logger } from './log'
 import { getMarkdownDocs } from './markdown'
 import { isInsideBlockComment, isInsideLineComment } from './utils'
@@ -49,11 +49,11 @@ const triggerChars = Array.from(new Set(
 
 let triggerChar: string | undefined
 const provider: CompletionItemProvider = {
-  provideCompletionItems(_document, _position, _, { triggerCharacter, triggerKind }) {
+  async provideCompletionItems(_document, _position, _, { triggerCharacter, triggerKind }) {
     if (triggerKind === CompletionTriggerKind.TriggerCharacter)
       triggerChar = triggerCharacter
 
-    function createCompletion(command: Command): CompletionItem[] {
+    async function createCompletions(command: Command): Promise<CompletionItem[]> {
       const { name, commentType = 'line' } = command
       const alias = (config?.alias?.[name] || []) as string[]
 
@@ -66,6 +66,16 @@ const provider: CompletionItemProvider = {
 
         if (!genAble)
           continue
+
+        if (config.autocomplete.onlyFixable) {
+          try {
+            await getFixableLintMessage(name)
+          }
+          catch (error) {
+            logger.info('error', error)
+            continue
+          }
+        }
 
         item = new CompletionItem(label)
         item.filterText = label
@@ -93,8 +103,11 @@ const provider: CompletionItemProvider = {
     }
 
     try {
-      const list = builtinCommands.flatMap(i => createCompletion(i))
-      return new CompletionList(list, true)
+      const list = await Promise.allSettled(builtinCommands.map(i => createCompletions(i)))
+      return new CompletionList(
+        list.filter(i => i.status === 'fulfilled').flatMap(i => i.value),
+        true,
+      )
     }
     catch (error) {
       logger.error('error', error)
@@ -110,7 +123,9 @@ const provider: CompletionItemProvider = {
     let docs = ''
 
     try {
-      const diffcode = await getLintDiff(name)
+      const message = await getFixableLintMessage(name)
+
+      const diffcode = await getLintDiff({ commandName: name, message })
       diffblock = config.autocomplete.diff
         ? ['```diff', diffcode, '```'].join(`\n`)
         : 'Preview diff disabled.'

@@ -11,6 +11,7 @@ const statusMap = {
   400: 'Bad Request',
 }
 
+///
 const errorCodes = ['404', '500', '403', '400', '400', '404']
 
 export const add = (a: number, b: number): number => a + b

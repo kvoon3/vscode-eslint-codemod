@@ -1,4 +1,4 @@
-import type { ESLint, Linter } from 'eslint'
+import type { ESLint, Linter, Rule } from 'eslint'
 import { basename } from 'node:path'
 import process from 'node:process'
 import { createPatch } from 'diff'
@@ -8,9 +8,10 @@ import { Position, Range } from 'vscode'
 import { logger } from './log'
 import { appendText, getCurWorkspaceDir, reject } from './utils'
 
-const editor = useActiveTextEditor()
+const activeEditor = useActiveTextEditor()
+const activeFileName = computed(() => activeEditor.value?.document.fileName)
 
-export const cwd = computed(() => editor.value ? getCurWorkspaceDir(editor.value.document) : undefined)
+export const cwd = computed(() => activeEditor.value ? getCurWorkspaceDir(activeEditor.value.document) : undefined)
 let eslintConfig: Linter.Config
 let eslint: ESLint | undefined
 
@@ -44,7 +45,32 @@ export async function updateLintConfig(cwd?: string) {
   }
 }
 
-export async function getLintDiff(commandName: string): Promise<string | undefined> {
+export async function getLintDiff({ commandName, message }: { commandName: string, message: FixableLintMessage }): Promise<string | undefined> {
+  if (!activeEditor.value)
+    return reject('Cannot find active editor')
+
+  const beforeRange = new Range(
+    new Position(message.line - 1, message.column - 1),
+    new Position(message.endLine - 1, message.endColumn - 1),
+  )
+  // FIXME: not much accurate for diff
+  const { text } = message.fix
+  const beforeText = activeEditor.value.document.getText(beforeRange)
+  const patchString = createPatch(
+    basename(activeFileName.value || ''),
+    beforeText.trim(),
+    text.trim(),
+    'old',
+    `new (${commandName})`,
+    {
+      ignoreWhitespace: true,
+    },
+  )
+
+  return patchString
+}
+
+export async function getFixableLintMessage(commandName: string): Promise<FixableLintMessage> {
   const editor = useActiveTextEditor()
   if (!editor.value)
     return reject('Cannot find active editor')
@@ -57,51 +83,36 @@ export async function getLintDiff(commandName: string): Promise<string | undefin
 
   const code = appendText(editor.value, commandName)
 
-  const filePath = editor.value.document.fileName
-  const filename = basename(filePath)
-
   const [result] = await eslint.lintText(code, {
-    filePath,
+    filePath: activeFileName.value || '',
     warnIgnored: true,
   })
 
   const commandMessages = result.messages.filter(i => i.ruleId === 'command/command')
 
-  const errMsg = commandMessages.find(i => ['command-error', 'command-error-cause'].includes(i.messageId || ''))?.message
-  if (errMsg)
-    return reject(errMsg)
+  const message = commandMessages.find((i) => {
+    return i.messageId === 'command-fix' && isFixableMessage(i)
+  }) as FixableLintMessage | undefined
 
-  const message = commandMessages.find(i => i.messageId === 'command-fix')
+  if (!message) {
+    const errmsg = commandMessages.find(
+      i => ['command-error', 'command-error-cause'].includes(i.messageId || ''),
+    )?.message || 'Unfixable command'
 
-  if (
-    !message?.fix
-    || !message.endLine
-    || !message.endColumn
-  ) {
-    // unfixable but log it in vscode output
-    logger.log('result', result)
-    return undefined
+    throw new Error(errmsg)
   }
 
-  const beforeRange = new Range(
-    new Position(message.line - 1, message.column - 1),
-    new Position(message.endLine - 1, message.endColumn - 1),
-  )
-  // FIXME: not much accurate for diff
-  const { text } = message.fix
-  const beforeText = editor.value.document.getText(beforeRange)
-  const patchString = createPatch(
-    filename,
-    beforeText.trim(),
-    text.trim(),
-    'old',
-    `new (${commandName})`,
-    {
-      ignoreWhitespace: true,
-    },
-  )
+  return message
+}
 
-  return patchString
+interface FixableLintMessage extends Linter.LintMessage {
+  endColumn: number
+  endLine: number
+  fix: Rule.Fix
+}
+
+export function isFixableMessage(message?: Linter.LintMessage): message is FixableLintMessage {
+  return Boolean(message && message.fix && message.endLine && message.endColumn)
 }
 
 async function getESLintModule() {

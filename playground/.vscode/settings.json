@@ -2,6 +2,7 @@
   "eslintCodemod.enable": true,
   "eslintCodemod.autocomplete.docs": false,
   "eslintCodemod.autocomplete.diff": true,
+  "eslintCodemod.autocomplete.onlyFixable": false,
   "autoHide.ui": {
     "sidebar": true,
     "auxiliaryBar": false,
