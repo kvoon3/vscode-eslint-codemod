@@ -79,7 +79,7 @@
         },
         "eslintCodemod.autocomplete.onlyFixable": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Only suggest command that can be fixed"
         },
         "eslintCodemod.alias": {

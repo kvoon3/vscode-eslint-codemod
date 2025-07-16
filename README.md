@@ -48,7 +48,7 @@ In-editor documentation (disabled by default).
 | `eslintCodemod.autocomplete.autoFix`     | Auto-fix code on autocomplete          | `boolean` | `true`           |
 | `eslintCodemod.autocomplete.docs`        | Show docs for suggestions              | `boolean` | `false`          |
 | `eslintCodemod.autocomplete.diff`        | Preview changes before applying        | `boolean` | `true`           |
-| `eslintCodemod.autocomplete.onlyFixable` | Only suggest command that can be fixed | `boolean` | `false`          |
+| `eslintCodemod.autocomplete.onlyFixable` | Only suggest command that can be fixed | `boolean` | `true`           |
 | `eslintCodemod.alias`                    | Command name alias                     | `object`  | See package.json |
 
 <!-- configs -->
