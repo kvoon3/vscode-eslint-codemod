@@ -6,7 +6,7 @@ import { resolveModule } from 'local-pkg'
 import { computed, useActiveTextEditor, watch } from 'reactive-vscode'
 import { Position, Range } from 'vscode'
 import { logger } from './log'
-import { appendText, getCurWorkspaceDir, reject } from './utils'
+import { appendText, getCurWorkspaceDir } from './utils'
 
 const activeEditor = useActiveTextEditor()
 const activeFileName = computed(() => activeEditor.value?.document.fileName)
@@ -47,7 +47,7 @@ export async function updateLintConfig(cwd?: string) {
 
 export async function getLintDiff({ commandName, message }: { commandName: string, message: FixableLintMessage }): Promise<string | undefined> {
   if (!activeEditor.value)
-    return reject('Cannot find active editor')
+    throw new Error('Cannot find active editor')
 
   const beforeRange = new Range(
     new Position(message.line - 1, message.column - 1),
@@ -73,13 +73,13 @@ export async function getLintDiff({ commandName, message }: { commandName: strin
 export async function getFixableLintMessage(commandName: string): Promise<FixableLintMessage> {
   const editor = useActiveTextEditor()
   if (!editor.value)
-    return reject('Cannot find active editor')
+    throw new Error('Cannot find active editor')
 
   if (!eslintConfig)
-    return reject('Cannot find eslint config')
+    throw new Error('Cannot find eslint config')
 
   if (!eslint)
-    return reject('ESLint not loaded')
+    throw new Error('ESLint not loaded')
 
   const code = appendText(editor.value, commandName)
 

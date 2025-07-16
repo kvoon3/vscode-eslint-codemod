@@ -77,5 +77,3 @@ export function isInsideLineComment(commentText = '//'): boolean {
 
   return lastLineCommentIndex !== -1 && !openStringLiterals
 }
-
-export const reject = (message: string) => Promise.reject(new Error(message))
