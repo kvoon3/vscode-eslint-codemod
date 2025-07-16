@@ -59,14 +59,15 @@ const provider: CompletionItemProvider = {
 
       const items: CompletionItem[] = []
 
-      const genItem = (label: string): CompletionItem | undefined => {
+      let item: CompletionItem | undefined
+      for (const label of [name, ...alias]) {
         const triggers = commentTriggerMap[commentType]
         const genAble = triggers.some(trigger => triggerChar === trigger.char && trigger.condition())
 
         if (!genAble)
-          return
+          continue
 
-        const item = new CompletionItem(label)
+        item = new CompletionItem(label)
         item.filterText = label
         item.kind = CompletionItemKind.Text
 
@@ -84,11 +85,6 @@ const provider: CompletionItemProvider = {
         if (config.autocomplete.autoFix)
           item.command = { title: 'fix code', command: 'eslint.executeAutofix' }
 
-        return item
-      }
-
-      for (const label of [name, ...alias]) {
-        const item = genItem(label)
         if (item)
           items.push(item)
       }
