@@ -141,7 +141,7 @@
     "lint": "eslint .",
     "vscode:prepublish": "nr build",
     "publish": "vsce publish --no-dependencies",
-    "pack": "vsce package --no-dependencies",
+    "package": "vsce package --no-dependencies",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "release": "bumpp",
