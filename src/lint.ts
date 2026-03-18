@@ -1,6 +1,7 @@
 import type { ESLint, Linter, Rule } from 'eslint'
 import { basename } from 'node:path'
 import process from 'node:process'
+import { pathToFileURL } from 'node:url'
 import { createPatch } from 'diff'
 import { resolveModule } from 'local-pkg'
 import { computed, useActiveTextEditor, watch } from 'reactive-vscode'
@@ -38,7 +39,7 @@ export async function updateLintConfig(cwd?: string) {
     if (!configPath)
       throw new Error('Cannot find eslint config file')
 
-    eslintConfig = await import(configPath)
+    eslintConfig = await import(pathToFileURL(configPath).href)
   }
   catch (error) {
     logger.error('error', error)
@@ -124,6 +125,6 @@ async function getESLintModule() {
   if (!modulePath)
     throw new Error('Cannot find eslint module')
 
-  const module = await import(modulePath)
+  const module = await import(pathToFileURL(modulePath).href)
   return module as { ESLint: new (options: ESLint.Options) => ESLint }
 }
